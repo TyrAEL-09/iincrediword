@@ -99,7 +99,7 @@ def mostrar_login():
 
     root = ctk.CTk()
     root.title("Iniciar Sesión en MyFirstChamba-Hub")
-    root.geometry("600x450")
+    root.geometry("700x500")
     root.minsize(400, 350)
 
     for i in range(10):
@@ -107,7 +107,7 @@ def mostrar_login():
     root.columnconfigure(0, weight=1)
 
     imagen_original = Image.open(os.path.join(CARPETA_RECURSOS, "logo.png"))
-    imagen = ctk.CTkImage(light_image=imagen_original, dark_image=imagen_original, size=(300, 170))
+    imagen = ctk.CTkImage(light_image=imagen_original, dark_image=imagen_original, size=(420, 270))
     ctk.CTkLabel(root, image=imagen, text="").grid(row=0, column=0, pady=(10, 5))
 
     ctk.CTkLabel(root, text="Inicio de Sesión a MyFirstChamba-Hub", font=ctk.CTkFont(size=20, weight="bold")).grid(row=1, column=0, pady=5)
@@ -128,7 +128,7 @@ def mostrar_login():
 def mostrar_splash():
     splash = ctk.CTk()
     splash.overrideredirect(True)
-    splash.geometry("420x460")
+    splash.geometry("500x700")
     splash.configure(fg_color="black")
     splash.attributes("-alpha", 0.0)
 
@@ -139,13 +139,13 @@ def mostrar_splash():
     imagen_by = Image.open(os.path.join(CARPETA_RECURSOS, "by.png"))
     imagen_estudio = Image.open(os.path.join(CARPETA_RECURSOS, "myfirstchamba.png"))
 
-    label_logo = ctk.CTkLabel(frame, image=ctk.CTkImage(imagen_logo, size=(250, 120)), text="")
+    label_logo = ctk.CTkLabel(frame, image=ctk.CTkImage(imagen_logo, size=(600, 400)), text="")
     label_logo.pack(pady=(10, 5))
 
     label_by = ctk.CTkLabel(frame, image=ctk.CTkImage(imagen_by, size=(80, 35)), text="")
     label_by.pack(pady=(0, 3))
 
-    label_estudio = ctk.CTkLabel(frame, image=ctk.CTkImage(imagen_estudio, size=(250, 120)), text="")
+    label_estudio = ctk.CTkLabel(frame, image=ctk.CTkImage(imagen_estudio, size=(400, 250)), text="")
     label_estudio.pack(pady=(0, 5))
 
     def fade_in(opacidad=0.0):
