@@ -42,7 +42,9 @@ def iniciar_sesion():
         if usuarios[email] == password:
             messagebox.showinfo("Éxito", f"Bienvenido {email}")
             root.destroy()
-            # Aquí puedes continuar a la siguiente parte del programa (selección de juegos)
+            # Aquí se importa dinámicamente para evitar problemas circulares
+            from seleccion_juego import mostrar_menu
+            mostrar_menu(email)
         else:
             messagebox.showerror("Error", "Contraseña incorrecta.")
     else:
