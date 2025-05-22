@@ -1,0 +1,3 @@
+def iniciar_juego(usuario):
+    print(f"Iniciando Hexa-Link para {usuario}")
+    # Aquí puedes lanzar la ventana del juego...
