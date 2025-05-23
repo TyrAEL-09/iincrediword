@@ -1,7 +1,7 @@
-from auth import splash, login
+from auth import login
 
 def main():
-    splash.mostrar_splash(login.mostrar_login)
+    login.mostrar_login()
 
 if __name__ == "__main__":
     main()

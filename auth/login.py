@@ -15,43 +15,76 @@ def mostrar_login():
     root.title("Iniciar Sesión en MyFirstChamba-Hub")
     root.geometry("700x500")
     root.minsize(400, 350)
+    root.configure(fg_color="black")
+    root.attributes("-alpha", 0.0)
 
     for i in range(10):
         root.rowconfigure(i, weight=1)
     root.columnconfigure(0, weight=1)
 
-    imagen_original = Image.open(os.path.join(CARPETA_RECURSOS, "logo.png"))
-    imagen = ctk.CTkImage(light_image=imagen_original, dark_image=imagen_original, size=(420, 270))
-    ctk.CTkLabel(root, image=imagen, text="").grid(row=0, column=0, pady=(10, 5))
+    # Splash frame con imagen myfirstchamba
+    splash_frame = ctk.CTkFrame(root, fg_color="black")
+    splash_frame.grid(row=0, column=0, rowspan=10, sticky="nsew")
 
-    ctk.CTkLabel(root, text="Inicio de Sesión a MyFirstChamba-Hub", font=ctk.CTkFont(size=20, weight="bold")).grid(row=1, column=0, pady=5)
+    imagen_estudio = Image.open(os.path.join(CARPETA_RECURSOS, "myfirstchamba.png"))
+    splash_img = ctk.CTkImage(imagen_estudio, size=(400, 300))
+    ctk.CTkLabel(splash_frame, image=splash_img, text="").pack(expand=True)
 
-    entry_email = ctk.CTkEntry(root, placeholder_text="Email", height=24, font=ctk.CTkFont(size=13))
-    entry_email.grid(row=2, column=0, padx=80, pady=(0, 10), sticky="nsew")
-
-    entry_password = ctk.CTkEntry(root, placeholder_text="Contraseña", show="*", height=24, font=ctk.CTkFont(size=13))
-    entry_password.grid(row=3, column=0, padx=80, pady=(0, 10), sticky="nsew")
-
-    def iniciar_sesion():
-        email = entry_email.get().strip()
-        password = entry_password.get().strip()
-        usuarios = cargar_usuarios()
-
-        if not email or not password:
-            messagebox.showerror("Error", "Completa todos los campos.")
-        elif email in usuarios:
-            if usuarios[email] == password:
-                messagebox.showinfo("Éxito", f"Bienvenido {email}")
-                root.destroy()
-                seleccion_juego.iniciar_menu(email)
-            else:
-                messagebox.showerror("Error", "Contraseña incorrecta.")
+    def fade_in(opacidad=0.0):
+        if opacidad < 1.0:
+            root.attributes("-alpha", opacidad)
+            root.after(50, lambda: fade_in(opacidad + 0.05))
         else:
-            messagebox.showwarning("No registrado", "El email no está registrado. Por favor regístrate.")
+            root.after(3000, lambda: fade_out(1.0))
 
-    ctk.CTkButton(root, text="Iniciar sesión", height=28, font=ctk.CTkFont(size=13), command=iniciar_sesion).grid(row=4, column=0, pady=(0, 10))
+    def fade_out(opacidad):
+        if opacidad > 0:
+            root.attributes("-alpha", opacidad)
+            root.after(50, lambda: fade_out(opacidad - 0.05))
+        else:
+            splash_frame.destroy()
+            mostrar_formulario()
+            fade_in_formulario(0.0)
 
-    ctk.CTkLabel(root, text="¿No tienes cuenta?", font=ctk.CTkFont(size=12)).grid(row=5, column=0)
-    ctk.CTkButton(root, text="Registrarse", height=26, font=ctk.CTkFont(size=12), command=lambda: [root.destroy(), ventana_registro(mostrar_login)], fg_color="gray").grid(row=6, column=0, pady=(0, 20))
+    def fade_in_formulario(opacidad):
+        if opacidad <= 1.0:
+            root.attributes("-alpha", opacidad)
+            root.after(30, lambda: fade_in_formulario(opacidad + 0.05))
 
+    def mostrar_formulario():
+        imagen_logo = Image.open(os.path.join(CARPETA_RECURSOS, "logo.png"))
+        logo = ctk.CTkImage(imagen_logo, size=(420, 270))
+        ctk.CTkLabel(root, image=logo, text="").grid(row=0, column=0, pady=(10, 5))
+
+        ctk.CTkLabel(root, text="Inicio de Sesión a MyFirstChamba-Hub", font=ctk.CTkFont(size=20, weight="bold")).grid(row=1, column=0, pady=5)
+
+        entry_email = ctk.CTkEntry(root, placeholder_text="Email", height=24, font=ctk.CTkFont(size=13))
+        entry_email.grid(row=2, column=0, padx=80, pady=(0, 10), sticky="nsew")
+
+        entry_password = ctk.CTkEntry(root, placeholder_text="Contraseña", show="*", height=24, font=ctk.CTkFont(size=13))
+        entry_password.grid(row=3, column=0, padx=80, pady=(0, 10), sticky="nsew")
+
+        def iniciar_sesion():
+            email = entry_email.get().strip()
+            password = entry_password.get().strip()
+            usuarios = cargar_usuarios()
+
+            if not email or not password:
+                messagebox.showerror("Error", "Completa todos los campos.")
+            elif email in usuarios:
+                if usuarios[email] == password:
+                    messagebox.showinfo("Éxito", f"Bienvenido {email}")
+                    root.destroy()
+                    seleccion_juego.iniciar_menu(email)
+                else:
+                    messagebox.showerror("Error", "Contraseña incorrecta.")
+            else:
+                messagebox.showwarning("No registrado", "El email no está registrado. Por favor regístrate.")
+
+        ctk.CTkButton(root, text="Iniciar sesión", height=28, font=ctk.CTkFont(size=13), command=iniciar_sesion).grid(row=4, column=0, pady=(0, 10))
+
+        ctk.CTkLabel(root, text="¿No tienes cuenta?", font=ctk.CTkFont(size=12)).grid(row=5, column=0)
+        ctk.CTkButton(root, text="Registrarse", height=26, font=ctk.CTkFont(size=12), command=lambda: [root.destroy(), ventana_registro(mostrar_login)], fg_color="gray").grid(row=6, column=0, pady=(0, 20))
+
+    fade_in()
     root.mainloop()
