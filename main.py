@@ -1,3 +1,7 @@
-from login import iniciar_aplicacion
+from auth import splash, login
 
-iniciar_aplicacion()
+def main():
+    splash.mostrar_splash(login.mostrar_login)
+
+if __name__ == "__main__":
+    main()
