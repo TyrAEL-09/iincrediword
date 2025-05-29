@@ -4,10 +4,6 @@ import tkinter as tk
 from datetime import datetime
 from typing import List, Tuple, Set, Optional
 
-def iniciar_lexicograma(usuario):
-    print(f"Iniciando Lexicograma para {usuario}")
-    # Aquí puedes lanzar la ventana del juego...
-
 # Inicializar pygame mixer
 pygame.mixer.init()
 
@@ -71,9 +67,9 @@ class BoggleGame:
         
         # Cargando sonidos a la clase
         try:
-            self.sonido_incorrecto = pygame.mixer.Sound("PROYECTO/roblox_muerte.mp3")
-            self.sonido_correcto = pygame.mixer.Sound("PROYECTO/correcto2.mp3")
-            self.musica_fondo = "PROYECTO/lofi-sample-if-i-cant-have-you-330746.mp3"
+            self.sonido_incorrecto = pygame.mixer.Sound("SONIDOS/roblox_muerte.mp3")
+            self.sonido_correcto = pygame.mixer.Sound("SONIDOS/correcto2.mp3")
+            self.musica_fondo = "SONIDOS/lofi_sample.mp3"
 
             print("Sonidos cargados correctamente")
         except pygame.error as e:
@@ -607,7 +603,7 @@ class BoggleGame:
 # Punto de entrada
 if __name__ == "__main__":
     # Cambia esta ruta por la ruta de tu archivo de palabras
-    archivo_palabras = "PROYECTO\palabras.txt"
+    archivo_palabras = "palabras.txt"
     
     juego = BoggleGame(archivo_palabras)
     juego.run()
