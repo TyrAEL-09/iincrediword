@@ -4,3 +4,8 @@ def configurar_ventana(root):
     root.minsize(500, 350)
     root.configure(fg_color="black")
     root.attributes("-alpha", 0.0)
+    
+def configurar_layout(root):
+    for i in range(10):
+        root.rowconfigure(i, weight=1)
+    root.columnconfigure(0, weight=1)

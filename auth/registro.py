@@ -1,6 +1,6 @@
 import customtkinter as ctk
-from .registro_ui import crear_interfaz_registro
-from .registro_logic import validar_y_registrar
+from .interfaz_registro.registro_ui import crear_interfaz_registro
+from .interfaz_registro.registro_logic import validar_y_registrar
 
 def ventana_registro(ventana_login_func):
     ventana = ctk.CTk()

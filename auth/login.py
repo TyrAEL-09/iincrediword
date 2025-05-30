@@ -3,9 +3,8 @@ from PIL import Image
 import os
 
 from auth.utils import asegurar_estructura_directorios
-from auth.interfaz_login.window_config import configurar_ventana
-from auth.interfaz_login.layout import configurar_layout
-from auth.interfaz_login.fade import fade_in
+from auth.interfaz_login.window_config import configurar_ventana, configurar_layout
+from auth.interfaz_login.animaciones import fade_in
 from auth.interfaz_login.formulario import mostrar_formulario
 
 CARPETA_RECURSOS = "recursos"
