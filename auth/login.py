@@ -7,7 +7,6 @@ from auth.interfaz_login.window_config import configurar_ventana
 from auth.interfaz_login.layout import configurar_layout
 from auth.interfaz_login.fade import fade_in
 from auth.interfaz_login.formulario import mostrar_formulario
-from menus import seleccion_juego
 
 CARPETA_RECURSOS = "recursos"
 
