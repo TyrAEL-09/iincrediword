@@ -2,7 +2,7 @@ import customtkinter as ctk
 from PIL import Image
 import os
 from auth.interfaz_login.autenticacion import iniciar_sesion
-from auth.registro import ventana_registro
+from auth.interfaz_registro.registro import ventana_registro
 
 CARPETA_RECURSOS = "recursos"
 

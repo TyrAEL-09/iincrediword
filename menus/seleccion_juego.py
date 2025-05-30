@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from PIL import Image
 import os
-from Hexa_Link.interfaz_inicio import interfaz_inicio  # cambio aquí
+from Hexa_Link.hexalink import iniciar_hexalink
 from LexicoGrama.lexicograma import iniciar_lexicograma
 
 class MenuSeleccionJuego:
@@ -9,7 +9,7 @@ class MenuSeleccionJuego:
         self.usuario = usuario
         self.root = ctk.CTk()
         self.root.title("Seleccionar Juego")
-        self.root.geometry("600x400")
+        self.root.geometry("600x500")
         self.root.resizable(False, False)
 
         ctk.set_appearance_mode("dark")
@@ -22,20 +22,37 @@ class MenuSeleccionJuego:
         fondo = ctk.CTkFrame(self.root, corner_radius=0)
         fondo.pack(fill="both", expand=True)
 
-        titulo = ctk.CTkLabel(fondo, text="Selecciona un juego", 
-                              font=ctk.CTkFont(size=28, weight="bold"),
-                              text_color="#00BFFF")
-        titulo.pack(pady=(30, 20))
+        # Configurar layout del fondo
+        fondo.rowconfigure(1, weight=1)
+        fondo.columnconfigure(0, weight=1)
 
-        contenedor_juegos = ctk.CTkFrame(fondo, fg_color="#1e2a38", corner_radius=15, border_width=2, border_color="#0e1521")
-        contenedor_juegos.pack(pady=10, padx=30, fill="x")
+        # Título
+        titulo = ctk.CTkLabel(
+            fondo,
+            text="Selecciona un juego",
+            font=ctk.CTkFont(size=28, weight="bold"),
+            text_color="#00BFFF"
+        )
+        titulo.grid(row=0, column=0, pady=(20, 10), sticky="n")
 
+        # Contenedor de juegos
+        contenedor_juegos = ctk.CTkFrame(
+            fondo,
+            fg_color="#1e2a38",
+            corner_radius=15,
+            border_width=2,
+            border_color="#0e1521"
+        )
+        contenedor_juegos.grid(row=1, column=0, padx=30, sticky="n")
+
+        # Cargar imágenes
         imagen_path_hexalink = os.path.join("recursos", "hexalink.png")
         imagen_hexalink = ctk.CTkImage(dark_image=Image.open(imagen_path_hexalink), size=(150, 150))
 
         imagen_path_lexicograma = os.path.join("recursos", "lexicograma.png")
         imagen_lexicograma = ctk.CTkImage(dark_image=Image.open(imagen_path_lexicograma), size=(150, 150))
 
+        # Botones de juego
         juegos_frame = ctk.CTkFrame(contenedor_juegos, fg_color="transparent")
         juegos_frame.pack(pady=20, padx=20)
 
@@ -54,7 +71,12 @@ class MenuSeleccionJuego:
         )
         boton_hexalink.grid(row=0, column=0, padx=30, pady=5)
 
-        etiqueta_hexalink = ctk.CTkLabel(juegos_frame, text="Hexa-Link", font=ctk.CTkFont(size=18, weight="bold"), text_color="#00BFFF")
+        etiqueta_hexalink = ctk.CTkLabel(
+            juegos_frame,
+            text="Hexa-Link",
+            font=ctk.CTkFont(size=18, weight="bold"),
+            text_color="#00BFFF"
+        )
         etiqueta_hexalink.grid(row=1, column=0, pady=(5, 15))
 
         boton_lexicograma = ctk.CTkButton(
@@ -72,9 +94,15 @@ class MenuSeleccionJuego:
         )
         boton_lexicograma.grid(row=0, column=1, padx=30, pady=5)
 
-        etiqueta_lexicograma = ctk.CTkLabel(juegos_frame, text="Lexicograma", font=ctk.CTkFont(size=18, weight="bold"), text_color="#00BFFF")
+        etiqueta_lexicograma = ctk.CTkLabel(
+            juegos_frame,
+            text="Lexicograma",
+            font=ctk.CTkFont(size=18, weight="bold"),
+            text_color="#00BFFF"
+        )
         etiqueta_lexicograma.grid(row=1, column=1, pady=(5, 15))
 
+        # Botón cerrar sesión al fondo
         boton_cerrar = ctk.CTkButton(
             fondo,
             text="Cerrar sesión",
@@ -86,12 +114,12 @@ class MenuSeleccionJuego:
             font=ctk.CTkFont(size=16, weight="bold"),
             command=self.cerrar_sesion
         )
-        boton_cerrar.pack(pady=25)
+        boton_cerrar.grid(row=2, column=0, pady=(10, 60), sticky="s")
 
     def abrir_hexalink(self):
-        self.root.withdraw()  # Oculta esta ventana
-        interfaz_inicio(self.usuario)
-        self.root.deiconify()  # Reaparece al cerrar el juego
+        self.root.withdraw()
+        iniciar_hexalink(self.usuario)
+        self.root.deiconify()
 
     def abrir_lexicograma(self):
         self.root.destroy()
