@@ -1,8 +1,9 @@
 # Hexa_Link/partida.py
 
 import os
-
-RUTA_SAVES = os.path.join("Hexa_Link", "savestates.txt")
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from constants import HEXA_LINK_SAVE_FILE
 
 def _parse_estado(lineas):
     estado = {}
@@ -23,9 +24,9 @@ def _parse_estado(lineas):
     return estado
 
 def cargar_partida_guardada(usuario):
-    if not os.path.exists(RUTA_SAVES):
+    if not os.path.exists(HEXA_LINK_SAVE_FILE):
         return None
-    with open(RUTA_SAVES, "r", encoding="utf-8") as f:
+    with open(HEXA_LINK_SAVE_FILE, "r", encoding="utf-8") as f:
         contenido = f.read()
 
     bloques = contenido.split('\n\n')
@@ -40,8 +41,8 @@ def cargar_partida_guardada(usuario):
 def guardar_partida(usuario, estado):
     # Leer todo
     bloques = []
-    if os.path.exists(RUTA_SAVES):
-        with open(RUTA_SAVES, "r", encoding="utf-8") as f:
+    if os.path.exists(HEXA_LINK_SAVE_FILE):
+        with open(HEXA_LINK_SAVE_FILE, "r", encoding="utf-8") as f:
             contenido = f.read()
         bloques = contenido.split('\n\n')
 
@@ -63,5 +64,5 @@ def guardar_partida(usuario, estado):
     if not encontrado:
         bloques.append("\n".join(nuevo_bloque))
 
-    with open(RUTA_SAVES, "w", encoding="utf-8") as f:
+    with open(HEXA_LINK_SAVE_FILE, "w", encoding="utf-8") as f:
         f.write("\n\n".join(bloques))

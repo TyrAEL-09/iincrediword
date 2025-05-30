@@ -2,10 +2,12 @@
 import random
 import os
 from collections import Counter
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from constants import BANCO_PALABRAS_FILE
 
 def cargar_banco_palabras():
-    ruta = os.path.join("recursos", "bancopalabras.txt")
-    with open(ruta, "r", encoding="utf-8") as f:
+    with open(BANCO_PALABRAS_FILE, "r", encoding="utf-8") as f:
         return [linea.strip().lower() for linea in f if len(linea.strip()) >= 3]
 
 def generar_palabras_y_letras():

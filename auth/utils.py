@@ -1,15 +1,15 @@
 import os
-
-CARPETA_DATOS = "datos"
-ARCHIVO_USUARIOS = os.path.join(CARPETA_DATOS, "usuarios.txt")
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from constants import DATOS_DIR, USUARIOS_FILE
 
 def asegurar_estructura_directorios():
-    os.makedirs(CARPETA_DATOS, exist_ok=True)
+    os.makedirs(DATOS_DIR, exist_ok=True)
 
 def cargar_usuarios():
     usuarios = {}
     try:
-        with open(ARCHIVO_USUARIOS, "r") as archivo:
+        with open(USUARIOS_FILE, "r") as archivo:
             for linea in archivo:
                 if ":" in linea:
                     email, password = linea.strip().split(":")
@@ -19,5 +19,5 @@ def cargar_usuarios():
     return usuarios
 
 def registrar_usuario(email: str, password: str):
-    with open(ARCHIVO_USUARIOS, "a") as archivo:
+    with open(USUARIOS_FILE, "a") as archivo:
         archivo.write(f"{email}:{password}\n")
