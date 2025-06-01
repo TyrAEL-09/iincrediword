@@ -1,0 +1,225 @@
+{
+  "raw_letters": [
+    "r",
+    "j",
+    "e",
+    "s",
+    "a",
+    "c",
+    "t"
+  ],
+  "center_letter": "a",
+  "valid_words": [
+    "escasa",
+    "trae",
+    "seca",
+    "caracter",
+    "area",
+    "cara",
+    "casas",
+    "atras",
+    "arce",
+    "tratar",
+    "rectas",
+    "carreras",
+    "trajes",
+    "tercera",
+    "caer",
+    "accra",
+    "estas",
+    "receta",
+    "cascara",
+    "cajas",
+    "trata",
+    "creas",
+    "rata",
+    "etcetera",
+    "recta",
+    "cartas",
+    "carta",
+    "sacar",
+    "recetas",
+    "sera",
+    "tarea",
+    "esta",
+    "caras",
+    "escasas",
+    "acerca",
+    "crear",
+    "tarjeta",
+    "traje",
+    "cera",
+    "esas",
+    "tarjetas",
+    "secas",
+    "casa",
+    "artes",
+    "caja",
+    "areas",
+    "estara",
+    "carretera",
+    "castas",
+    "resta",
+    "tras",
+    "sastre",
+    "tareas",
+    "cerca",
+    "carreteras",
+    "arte",
+    "estar"
+  ],
+  "target_count": 57,
+  "found_words": [
+    "carta",
+    "rata"
+  ],
+  "current_word": "",
+  "score": 200,
+  "combo_count": 2,
+  "combo_msg": "COMBO ACTIVADO: x1.25, RACHA DE 2 PALABRAS!",
+  "combo_timer": 77043,
+  "paused": true,
+  "paused_time_total": 0,
+  "pause_start": 78602,
+  "start_time": 59037,
+  "letters": [
+    "r",
+    "j",
+    "e",
+    "a",
+    "s",
+    "c",
+    "t"
+  ],
+  "positions": [
+    [
+      403.92304845413264,
+      233.0
+    ],
+    [
+      351.9615242270663,
+      323.0
+    ],
+    [
+      248.0384757729337,
+      323.0
+    ],
+    [
+      300,
+      233
+    ],
+    [
+      196.07695154586736,
+      233.0
+    ],
+    [
+      248.03847577293365,
+      143.00000000000003
+    ],
+    [
+      351.9615242270663,
+      143.0
+    ]
+  ],
+  "valid_by_initial": {
+    "e": [
+      "escasa",
+      "estas",
+      "etcetera",
+      "esta",
+      "escasas",
+      "esas",
+      "estara",
+      "estar"
+    ],
+    "t": [
+      "trae",
+      "tratar",
+      "trajes",
+      "tercera",
+      "trata",
+      "tarea",
+      "tarjeta",
+      "traje",
+      "tarjetas",
+      "tras",
+      "tareas"
+    ],
+    "s": [
+      "seca",
+      "sacar",
+      "sera",
+      "secas",
+      "sastre"
+    ],
+    "c": [
+      "caracter",
+      "cara",
+      "casas",
+      "carreras",
+      "caer",
+      "cascara",
+      "cajas",
+      "creas",
+      "cartas",
+      "carta",
+      "caras",
+      "crear",
+      "cera",
+      "casa",
+      "caja",
+      "carretera",
+      "castas",
+      "cerca",
+      "carreteras"
+    ],
+    "a": [
+      "area",
+      "atras",
+      "arce",
+      "accra",
+      "acerca",
+      "artes",
+      "areas",
+      "arte"
+    ],
+    "r": [
+      "rectas",
+      "receta",
+      "rata",
+      "recta",
+      "recetas",
+      "resta"
+    ]
+  },
+  "btn_shuffle_rect": [
+    240,
+    560,
+    120,
+    40
+  ],
+  "btn_check_rect": [
+    240,
+    470,
+    120,
+    40
+  ],
+  "btn_pause_rect": [
+    240,
+    650,
+    120,
+    40
+  ],
+  "btn_del_rect": [
+    150,
+    560,
+    120,
+    40
+  ],
+  "btn_clear_rect": [
+    330,
+    560,
+    120,
+    40
+  ]
+}
