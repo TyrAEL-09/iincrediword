@@ -9,6 +9,8 @@ class GameSettings:
     MAX_GLOBAL_GENERATION_ATTEMPTS = 10
     MAX_INTERNAL_BOARD_ATTEMPTS = 20
     WORD_FILE = "palabras.txt"
+    SAVE_FILE_NAME = "partida_guardada.pkl"
+
 
 class UISettings:
     """Configuraciones relacionadas con la interfaz de usuario."""
@@ -32,12 +34,16 @@ class UISettings:
         'selected_cell_bg': "#FFA500",
         'hint_box_bg': "#2a2a2a",
         'hint_box_fg': "#FFFFFF",
-        'hint_box_border': "#444444"
+        'hint_box_border': "#444444",
+        'message_fg': "#FFC107",
+        'pause_overlay_bg': "rgba(0, 0, 0, 0.7)",
+        'pause_fg': "#FFFFFF"
     }
 
     SOUND_CORRECT = "correcto2.mp3"
     SOUND_INCORRECT = "roblox_muerte.mp3"
     MUSIC_BACKGROUND = "lofi_sample.mp3"
+    SOUND_WINNING = "winning.mp3"
 
 # Instancias de las configuraciones para fácil acceso
 GAME_SETTINGS = GameSettings()
