@@ -7,17 +7,19 @@ from PIL import Image, ImageTk
 class GameUI:
     """Gestiona la creación y actualización de la interfaz de usuario del juego."""
 
-    def __init__(self, root: tk.Tk, ui_settings, on_cell_click, on_submit_word, on_pause_toggle, on_music_toggle, on_clear_selection): # <-- Nuevo parámetro: on_clear_selection
+    def __init__(self, root: tk.Tk, ui_settings, on_cell_click, on_submit_word, on_pause_toggle, on_music_toggle, on_clear_selection, on_how_to_play_game_click, on_back_to_menu_and_save):
         self.root = root
         self.ui_settings = ui_settings
         self.on_cell_click_callback = on_cell_click
         self.on_submit_word_callback = on_submit_word
         self.on_pause_toggle_callback = on_pause_toggle
         self.on_music_toggle_callback = on_music_toggle
-        self.on_clear_selection_callback = on_clear_selection # <-- Guardar el callback
+        self.on_clear_selection_callback = on_clear_selection
+        self.on_how_to_play_game_click = on_how_to_play_game_click
+        self.on_back_to_menu_and_save_callback = on_back_to_menu_and_save # Cambiado el nombre
 
         self.grid_cell_widgets: List[List[Optional[tk.Button]]] = []
-        self.hint_labels: Dict[str, List[tk.Label]] = {} # Para las cajas de letras de las pistas
+        self.hint_labels: Dict[str, List[tk.Label]] = {}
 
         self.frame_sopa = tk.Frame(root, bg=self.ui_settings.COLORS['bg'])
         self.frame_input = tk.Frame(root, bg=self.ui_settings.COLORS['bg'])
@@ -55,15 +57,14 @@ class GameUI:
             font=font_ui_bold_tuple, bg=self.ui_settings.COLORS['button_bg'], fg=self.ui_settings.COLORS['button_fg'],
             relief=tk.RAISED, borderwidth=2
         )
-        self.button_submit.grid(row=2, column=0, columnspan=2, padx=(5,2), pady=5, sticky="ew") # <-- Modificado columnspan y padx
+        self.button_submit.grid(row=2, column=0, columnspan=2, padx=(5,2), pady=5, sticky="ew")
 
-        # Nuevo botón "Limpiar"
         self.button_clear = tk.Button(
-            self.frame_input, text="Limpiar", command=self.on_clear_selection_callback, # <-- Asignar el callback
+            self.frame_input, text="Limpiar", command=self.on_clear_selection_callback,
             font=font_ui_bold_tuple, bg=self.ui_settings.COLORS['button_bg'], fg=self.ui_settings.COLORS['button_fg'],
             relief=tk.RAISED, borderwidth=2
         )
-        self.button_clear.grid(row=2, column=2, padx=(2,5), pady=5, sticky="ew") # <-- Nueva fila/columna
+        self.button_clear.grid(row=2, column=2, padx=(2,5), pady=5, sticky="ew")
 
         self.button_pause_game = tk.Button(
             self.frame_input, text="Pausar", command=self.on_pause_toggle_callback,
@@ -79,16 +80,39 @@ class GameUI:
         )
         self.button_music_game.grid(row=3, column=1, columnspan=2, pady=5, sticky="ew", padx=(2,5))
 
+        self.button_how_to_play_game = tk.Button(
+            self.frame_input, text="Cómo Jugar", command=self.on_how_to_play_game_click,
+            font=font_ui_bold_tuple, bg=self.ui_settings.COLORS['button_bg'], fg=self.ui_settings.COLORS['button_fg'],
+            relief=tk.RAISED, borderwidth=2
+        )
+        self.button_how_to_play_game.grid(row=4, column=0, columnspan=2, pady=5, sticky="ew", padx=(5,2))
+
+        # Botón "Volver al Menú"
+        self.button_back_to_menu = tk.Button(
+            self.frame_input, text="Volver al Menú", command=self.on_back_to_menu_and_save_callback, # Usar el nuevo callback
+            font=font_ui_bold_tuple, bg=self.ui_settings.COLORS['button_bg'], fg=self.ui_settings.COLORS['button_fg'],
+            relief=tk.RAISED, borderwidth=2
+        )
+        self.button_back_to_menu.grid(row=4, column=2, pady=5, sticky="ew", padx=(2,5))
+
         self.label_message = tk.Label(
             self.frame_input, text="", font=font_ui_tuple,
             bg=self.ui_settings.COLORS['bg'], fg=self.ui_settings.COLORS['fg'], wraplength=350
         )
-        self.label_message.grid(row=4, column=0, columnspan=3, pady=5, sticky="ew")
+        self.label_message.grid(row=5, column=0, columnspan=3, pady=5, sticky="ew")
+
         self.frame_input.grid_columnconfigure(0, weight=1)
         self.frame_input.grid_columnconfigure(1, weight=1)
         self.frame_input.grid_columnconfigure(2, weight=1)
+
     def show_game_interface(self):
-        """Muestra los frames de la interfaz de juego y oculta otros."""
+        """Muestra los frames de la interfaz de juego y oculta otros.
+        Establece el tamaño de la ventana a una dimensión más pequeña y cuadrada."""
+        desired_width = 750
+        desired_height = 750
+
+        self.root.geometry(f"{desired_width}x{desired_height}")
+
         self.frame_sopa.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
         self.frame_lista.grid(row=0, column=1, rowspan=2, sticky='ns', padx=10, pady=10)
         self.frame_input.grid(row=1, column=0, sticky='ew', padx=10, pady=(5,10))
@@ -100,7 +124,9 @@ class GameUI:
 
         self.entry.config(state=NORMAL)
         self.button_submit.config(state=NORMAL)
-        self.button_pause_game.config(state=NORMAL)
+        self.button_clear.config(state=NORMAL)
+        self.button_pause_game.config(state=NORMAL, text="Pausar")
+        self.button_back_to_menu.config(state=NORMAL) # Habilita el nuevo botón
         self.entry.focus_set()
 
     def hide_game_interface(self):
@@ -136,15 +162,14 @@ class GameUI:
 
     def update_board_selection(self, current_selection_path: List[Tuple[int, int]]):
         """Actualiza visualmente la selección de celdas en el tablero."""
-        # Restablecer todas las celdas a su color por defecto
         for r_idx in range(len(self.grid_cell_widgets)):
             for c_idx in range(len(self.grid_cell_widgets[0])):
                 if self.grid_cell_widgets[r_idx][c_idx]:
                     self.grid_cell_widgets[r_idx][c_idx].config(bg=self.ui_settings.COLORS['grid'])
-        # Colorear las celdas seleccionadas
         for r_idx, c_idx in current_selection_path:
-            if self.grid_cell_widgets[r_idx][c_idx]:
-                self.grid_cell_widgets[r_idx][c_idx].config(bg=self.ui_settings.COLORS['selected_cell_bg'])
+            if 0 <= r_idx < len(self.grid_cell_widgets) and 0 <= c_idx < len(self.grid_cell_widgets[0]):
+                if self.grid_cell_widgets[r_idx][c_idx]:
+                    self.grid_cell_widgets[r_idx][c_idx].config(bg=self.ui_settings.COLORS['selected_cell_bg'])
 
     def display_word_list(self, words_by_length: Dict[int, List[str]], found_words: Set[str]):
         """Dibuja o actualiza la lista de palabras a encontrar."""
@@ -175,7 +200,7 @@ class GameUI:
                 for idx, char_in_palabra in enumerate(word_str):
                     box_text = char_in_palabra.upper() if is_found else ""
                     if not is_found and idx == 0:
-                        box_text = word_str[0].upper() # Mostrar la primera letra como pista
+                        box_text = word_str[0].upper()
 
                     box_fg = self.ui_settings.COLORS['found_word_fg'] if is_found else self.ui_settings.COLORS['hint_box_fg']
 
@@ -190,11 +215,12 @@ class GameUI:
 
     def update_found_word_display(self, word: str):
         """Actualiza la visualización de una palabra encontrada en la lista de pistas."""
-        if word in self.hint_labels:
-            letter_boxes = self.hint_labels[word]
+        word_upper = word.upper()
+        if word_upper in self.hint_labels:
+            letter_boxes = self.hint_labels[word_upper]
             for i, box_label in enumerate(letter_boxes):
                 if i < len(word):
-                    box_label.config(text=word[i], fg=self.ui_settings.COLORS['found_word_fg'])
+                    box_label.config(text=word[i].upper(), fg=self.ui_settings.COLORS['found_word_fg'])
 
     def update_status_labels(self, found_count: int, target_count: int, score: int):
         """Actualiza las etiquetas de estado del juego."""
@@ -226,37 +252,17 @@ class GameUI:
         self.entry.delete(0, END)
         self.entry.insert(0, text)
 
-    def enable_game_controls(self):
-        """Habilita los controles del juego (entrada, botones, tablero)."""
-        self.entry.config(state=NORMAL)
-        self.button_submit.config(state=NORMAL)
-        self.button_pause_game.config(state=NORMAL, text="Pausar") # Asegura el texto
-        if self.grid_cell_widgets:
-            for row_widgets in self.grid_cell_widgets:
-                for widget_cell in row_widgets:
-                    if widget_cell: widget_cell.config(state=NORMAL)
-        self.entry.focus_set()
-
-    def disable_game_controls(self):
-        """Deshabilita los controles del juego (entrada, botones, tablero)."""
-        self.entry.config(state=DISABLED)
-        self.button_submit.config(state=DISABLED)
-        self.button_pause_game.config(text="Reanudar") # Cambia el texto al pausar
-        if self.grid_cell_widgets:
-            for row_widgets in self.grid_cell_widgets:
-                for widget_cell in row_widgets:
-                    if widget_cell: widget_cell.config(state=DISABLED)
-
     def update_music_button_text(self, text: str):
         """Actualiza el texto del botón de música en la interfaz de juego."""
         self.button_music_game.config(text=text)
-    
+
     def enable_game_controls(self):
         """Habilita los controles del juego (entrada, botones, tablero)."""
         self.entry.config(state=NORMAL)
         self.button_submit.config(state=NORMAL)
-        self.button_clear.config(state=NORMAL) # <-- Habilitar el botón "Limpiar"
-        self.button_pause_game.config(state=NORMAL, text="Pausar") # Asegura el texto
+        self.button_clear.config(state=NORMAL)
+        self.button_pause_game.config(state=NORMAL, text="Pausar")
+        self.button_back_to_menu.config(state=NORMAL) # Habilita el nuevo botón
         if self.grid_cell_widgets:
             for row_widgets in self.grid_cell_widgets:
                 for widget_cell in row_widgets:
@@ -267,8 +273,9 @@ class GameUI:
         """Deshabilita los controles del juego (entrada, botones, tablero)."""
         self.entry.config(state=DISABLED)
         self.button_submit.config(state=DISABLED)
-        self.button_clear.config(state=DISABLED) # <-- Deshabilitar el botón "Limpiar"
-        self.button_pause_game.config(text="Reanudar") # Cambia el texto al pausar
+        self.button_clear.config(state=DISABLED)
+        self.button_pause_game.config(text="Reanudar")
+        self.button_back_to_menu.config(state=DISABLED) # Deshabilita el nuevo botón
         if self.grid_cell_widgets:
             for row_widgets in self.grid_cell_widgets:
                 for widget_cell in row_widgets:
