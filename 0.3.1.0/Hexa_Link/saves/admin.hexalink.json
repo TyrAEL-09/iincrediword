@@ -1,0 +1,100 @@
+{
+  "raw_letters": [
+    "v",
+    "m",
+    "h",
+    "e",
+    "y",
+    "l",
+    "u"
+  ],
+  "center_letter": "h",
+  "valid_words": [
+    "hule"
+  ],
+  "target_count": 1,
+  "found_words": [],
+  "current_word": "",
+  "score": 0,
+  "combo_count": 0,
+  "combo_msg": "",
+  "combo_timer": 0,
+  "paused": true,
+  "paused_time_total": 0,
+  "pause_start": 5430,
+  "start_time": 311,
+  "letters": [
+    "v",
+    "m",
+    "e",
+    "h",
+    "y",
+    "l",
+    "u"
+  ],
+  "positions": [
+    [
+      403.92304845413264,
+      233.0
+    ],
+    [
+      351.9615242270663,
+      323.0
+    ],
+    [
+      248.0384757729337,
+      323.0
+    ],
+    [
+      300,
+      233
+    ],
+    [
+      196.07695154586736,
+      233.0
+    ],
+    [
+      248.03847577293365,
+      143.00000000000003
+    ],
+    [
+      351.9615242270663,
+      143.0
+    ]
+  ],
+  "valid_by_initial": {
+    "h": [
+      "hule"
+    ]
+  },
+  "btn_shuffle_rect": [
+    276,
+    524,
+    48,
+    48
+  ],
+  "btn_check_rect": [
+    240,
+    463,
+    120,
+    40
+  ],
+  "btn_pause_rect": [
+    532,
+    20,
+    48,
+    48
+  ],
+  "btn_del_rect": [
+    148,
+    528,
+    120,
+    40
+  ],
+  "btn_clear_rect": [
+    332,
+    528,
+    120,
+    40
+  ]
+}

@@ -1,3 +1,0 @@
-def iniciar_lexicograma(usuario):
-    print(f"Iniciando Lexicograma para {usuario}")
-    # Aquí puedes lanzar la ventana del juego...
