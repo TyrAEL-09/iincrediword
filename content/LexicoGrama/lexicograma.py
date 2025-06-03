@@ -1,3 +1,5 @@
+from lexigrama_game.main import main as lexicograma_main_func # MODIFICADO: import correcto
+
 def iniciar_lexicograma(usuario):
     print(f"Iniciando Lexicograma para {usuario}")
-    # Aquí puedes lanzar la ventana del juego...
+    lexicograma_main_func(usuario) # MODIFICADO: Pasa el 'usuario'
