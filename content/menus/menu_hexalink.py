@@ -177,7 +177,7 @@ class MenuHexaLink:
         Vuelve al menú de selección de juegos.
         Uso: Botón 'Volver a seleccionar juego'.
         """
-        self.root.withdraw()
+        self.root.destroy()
         from menus.seleccion_juego import iniciar_menu
         iniciar_menu(self.usuario)
 
@@ -189,7 +189,7 @@ class MenuHexaLink:
         self.root.destroy()
         if self.parent_root:
             self.parent_root.destroy()
-        os._exit(0)
+        # No llamar a os._exit(0): la consola se cerrará automáticamente cuando no haya ventanas Tkinter activas
 
     def mostrar_tablero_puntajes(self):
         """

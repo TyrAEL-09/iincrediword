@@ -1,6 +1,13 @@
 import math, pygame, random
 from .constants import *
 from .word_logic import choose_letters_and_words
+from .state_ui import setup_letter_positions, setup_buttons
+from .state_logic import (
+    is_valid_word,
+    handle_combo_and_feedback,
+    find_heptacrack,
+    force_one_heptacrack
+)
 
 class GameState:
     def __init__(self):
@@ -8,48 +15,17 @@ class GameState:
         self.target_count, self.found_words, self.current_word, self.score = len(self.valid_words), [], "", 0
         self.combo_count, self.combo_msg, self.combo_timer, self.paused = 0, "", 0, False
         self.paused_time_total, self.pause_start, self.start_time = 0, 0, pygame.time.get_ticks()
-        self._setup_letter_positions(); self._setup_buttons()
+        self.last_word_feedback = None
+        force_one_heptacrack(self)
+        setup_letter_positions(self)
+        setup_buttons(self)
         self.valid_by_initial = {}; [self.valid_by_initial.setdefault(w[0], []).append(w) for w in self.valid_words]
 
-    def _setup_letter_positions(self):
-        o, c = [l for l in self.raw_letters if l != self.center_letter], self.center_letter
-        self.letters = o[:3] + [c] + o[3:]
-        cx, cy, r = GAME_AREA_WIDTH//2, HEIGHT//3, HEX_SIZE*math.sqrt(3)
-        ang = [0,60,120,180,240,300]
-        self.positions = [(cx+r*math.cos(math.radians(a)), cy+r*math.sin(math.radians(a))) for a in ang]
-        self.positions.insert(3, (cx, cy))
-
-    def _setup_buttons(self):
-        cx = GAME_AREA_WIDTH // 2
-        comprobar_y = HEIGHT // 3 + 230  # Subido un poco respecto al anterior
-        self.btn_check_rect = pygame.Rect(cx - 60, comprobar_y, 120, 40)
-        # Fila inferior: Borrar, Reordenar, Eliminar (simétricos y alineados)
-        fila_y = comprobar_y + 65  # Subido un poco respecto al anterior
-        gap = 32
-        w, h = 120, 40
-        sq = 48
-        self.btn_del_rect = pygame.Rect(cx - w - gap, fila_y, w, h)
-        self.btn_shuffle_rect = pygame.Rect(cx - sq//2, fila_y + (h - sq)//2, sq, sq)
-        self.btn_clear_rect = pygame.Rect(cx + gap, fila_y, w, h)
-        # Pausa (esquina superior derecha del área de juego)
-        pausa_x = GAME_AREA_WIDTH - sq - 20
-        pausa_y = 20
-        self.btn_pause_rect = pygame.Rect(pausa_x, pausa_y, sq, sq)
-
     def is_valid_word(self, word):
-        return word in self.valid_words and self.center_letter in word and len(word) >= MIN_LETTERS and set(word) <= set(self.raw_letters)
+        return is_valid_word(self, word)
 
     def submit_word(self):
-        if self.current_word and self.current_word not in self.found_words and self.is_valid_word(self.current_word):
-            self.combo_count += 1
-            mult = max([m for t, m in sorted(COMBO_MULTIPLIERS.items()) if self.combo_count >= t] + [1.0])
-            self.score += int(len(self.current_word) * POINTS_PER_LETTER * mult)
-            self.found_words.append(self.current_word)
-            if self.combo_count >= 2:
-                self.combo_msg = f"COMBO ACTIVADO: x{mult}, RACHA DE {self.combo_count} PALABRAS!"
-                self.combo_timer = pygame.time.get_ticks()
-        else: self.combo_count = 0
-        self.current_word = ""
+        handle_combo_and_feedback(self)
 
     def delete_last_letter(self): self.current_word = self.current_word[:-1]
     def clear_word(self): self.current_word = ""
@@ -71,6 +47,11 @@ class GameState:
         random.shuffle(o)
         idx = self.letters.index(c)
         self.letters = o[:]; self.letters.insert(idx, c)
+
+    def get_heptacrack(self):
+        if not hasattr(self, '_heptacrack'):
+            self._heptacrack = find_heptacrack(self)
+        return self._heptacrack
 
     def to_dict(self):
         return {
@@ -126,6 +107,8 @@ class GameState:
         obj.btn_pause_rect = cls._tuple_to_rect(data.get("btn_pause_rect"))
         obj.btn_del_rect = cls._tuple_to_rect(data.get("btn_del_rect"))
         obj.btn_clear_rect = cls._tuple_to_rect(data.get("btn_clear_rect"))
+        # Asegura que last_word_feedback siempre exista
+        obj.last_word_feedback = data.get("last_word_feedback", None)
         return obj
 
     @staticmethod
