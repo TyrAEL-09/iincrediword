@@ -1,0 +1,60 @@
+{
+    "crysys": {
+        "board": [
+            [
+                "A",
+                "D",
+                "O",
+                "B",
+                "R",
+                "I"
+            ],
+            [
+                "L",
+                "F",
+                "C",
+                "O",
+                "L",
+                "O"
+            ],
+            [
+                "A",
+                "I",
+                "H",
+                "S",
+                "E",
+                "M"
+            ],
+            [
+                "C",
+                "S",
+                "A",
+                "T",
+                "S",
+                "I"
+            ],
+            [
+                "O",
+                "L",
+                "B",
+                "A",
+                "E",
+                "M"
+            ]
+        ],
+        "target_words": [
+            "CHIFLADO",
+            "FISCAL",
+            "ADOBO",
+            "SOBRIO",
+            "MESES",
+            "ESTABLO",
+            "MOLESTABA"
+        ],
+        "found_words": [],
+        "score": 0,
+        "time_elapsed": 4,
+        "current_selection_path": [],
+        "current_selected_word": ""
+    }
+}
