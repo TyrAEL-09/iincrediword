@@ -1,4 +1,8 @@
 # settings.py
+from pathlib import Path # AÑADIDO
+
+BASE_DIR = Path(__file__).resolve().parent.parent # AÑADIDO: Apunta a lexigrama_game
+RECURSOS_DIR_GENERAL = BASE_DIR.parent / "recursos" # AÑADIDO: Apunta a content/recursos
 
 class GameSettings:
     """Configuraciones relacionadas con la lógica del juego."""
@@ -8,8 +12,10 @@ class GameSettings:
     MAX_REPLACEMENTS_PER_SLOT = 100
     MAX_GLOBAL_GENERATION_ATTEMPTS = 10
     MAX_INTERNAL_BOARD_ATTEMPTS = 20
-    WORD_FILE = "palabras.txt"
-    SAVE_FILE_NAME = "partidas_guardadas.json"
+    WORD_FILE = BASE_DIR / "palabras.txt" # MODIFICADO: Ruta absoluta
+    
+    SAVES_DIR = BASE_DIR / "saves" # AÑADIDO
+    SAVE_FILE_NAME = SAVES_DIR / "partidas_guardadas.json" # MODIFICADO: Ruta absoluta
 
 
 class UISettings:
@@ -19,8 +25,10 @@ class UISettings:
     UI_FONT_SIZE = 15
     LOGO_MAX_WIDTH = 500
     LOGO_MAX_HEIGHT = 300
-    LOGO_PATH = "lexigrama.png"
-    ICON_PATH = "icon.png"
+    
+    # Rutas construidas usando RECURSOS_DIR_GENERAL
+    LOGO_PATH = RECURSOS_DIR_GENERAL / "lexigrama.png" # MODIFICADO
+    ICON_PATH = RECURSOS_DIR_GENERAL / "icon.png" # MODIFICADO (asegúrate que "icon.png" exista en content/recursos)
 
     COLORS = {
         'bg': "#1a1a1a",
@@ -40,10 +48,17 @@ class UISettings:
         'pause_fg': "#FFFFFF"
     }
 
-    SOUND_CORRECT = "correcto2.mp3"
-    SOUND_INCORRECT = "roblox_muerte.mp3"
-    MUSIC_BACKGROUND = "lofi_sample.mp3"
-    SOUND_WINNING = "winning.mp3"
+    # Nombres de archivo originales para sonidos
+    _SOUND_CORRECT_FILENAME = "correcto2.mp3"
+    _SOUND_INCORRECT_FILENAME = "roblox_muerte.mp3"
+    _MUSIC_BACKGROUND_FILENAME = "lofi_sample.mp3"
+    _SOUND_WINNING_FILENAME = "winning.mp3"
+
+    # Rutas completas a los sonidos
+    SOUND_CORRECT = RECURSOS_DIR_GENERAL / _SOUND_CORRECT_FILENAME # MODIFICADO
+    SOUND_INCORRECT = RECURSOS_DIR_GENERAL / _SOUND_INCORRECT_FILENAME # MODIFICADO
+    MUSIC_BACKGROUND = RECURSOS_DIR_GENERAL / _MUSIC_BACKGROUND_FILENAME # MODIFICADO
+    SOUND_WINNING = RECURSOS_DIR_GENERAL / _SOUND_WINNING_FILENAME # MODIFICADO
 
 # Instancias de las configuraciones para fácil acceso
 GAME_SETTINGS = GameSettings()
