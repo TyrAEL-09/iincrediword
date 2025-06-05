@@ -23,7 +23,7 @@ PAUSE_BORDER = (255, 215, 0)
 
 # Game settings
 MIN_WORDS, MAX_WORDS = 50, 100
-MIN_LETTERS = 3
+MIN_letras = 3
 POINTS_PER_LETTER = 20
 HEX_SIZE = 60
 COMBO_MULTIPLIERS = {
@@ -51,16 +51,19 @@ except:
     FONT_MEDIUM = pygame.font.SysFont('Arial', 24)
     FONT_SMALL = pygame.font.SysFont('Arial', 20)
 
-# Cursors
+# Cursores
 ARROW_CURSOR = pygame.cursors.Cursor(pygame.SYSTEM_CURSOR_ARROW)
 HAND_CURSOR = pygame.cursors.Cursor(pygame.SYSTEM_CURSOR_HAND)
 
-# Hexagon geometry
+# Geometria Hexagonal
 HEX_RADIUS = HEX_SIZE * 3**0.5
 HEX_ANGLES = [0, 60, 120, 180, 240, 300]
 
-# Button configuration
+# Configuración de botones
 BUTTON_WIDTH, BUTTON_HEIGHT = 120, 40
 BUTTON_RADIUS = 4
-# Añade esto en la sección de colores
+
 PAUSE_OVERLAY = (0, 0, 0, 180)  # Negro semitransparente (R, G, B, Alpha)
+
+# Ruta a la música principal
+MUSIC_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "recursos", "Balatro Main Theme.mp3")

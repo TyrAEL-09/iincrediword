@@ -3,7 +3,7 @@ import os
 import subprocess
 import sys
 from PIL import Image
-from utils.ui_utils import play_click_sound
+from utils.ui_utils import sonido_click
 
 # Ruta de la imagen del logo de Hexa-Link
 HEXALINK_IMG_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'recursos', 'hexalink.png')
@@ -35,6 +35,11 @@ class MenuHexaLink:
         self.hexalink_img = self.cargar_imagen()
         self.construir_interfaz()
         self.root.mainloop()
+        if self.parent_root is not None:
+            try:
+                self.parent_root.destroy()
+            except Exception:
+                pass
 
     def cargar_imagen(self):
         """
@@ -112,7 +117,7 @@ class MenuHexaLink:
             Uso: Para todos los botones del menú.
             """
             def wrapper(*args, **kwargs):
-                play_click_sound()
+                sonido_click()
                 return cmd(*args, **kwargs)
             return wrapper
 
@@ -236,10 +241,10 @@ class MenuHexaLink:
         titulo = ctk.CTkLabel(win, text="¿Cómo se juega Hexa-Link?", font=ctk.CTkFont(size=22, weight="bold"), text_color="#00BFFF")
         titulo.pack(pady=(22, 10))
         explicacion = (
-            "• El objetivo es formar palabras válidas usando las letras del tablero.\n"
-            "• Cada palabra debe tener al menos 3 letras y contener la letra central obligatoriamente.\n"
+            "• El objetivo es formar palabras válidas usando las letras del\ntablero.\n"
+            "• Cada palabra debe tener al menos 3 letras y contener la letra \ncentral obligatoriamente.\n"
             "• Cada letra usada vale 20 puntos.\n"
-            "• Si logras formar varias palabras seguidas sin fallar, se activa el sistema de combos:\n"
+            "• Si logras formar varias palabras seguidas sin fallar, se activa \nel sistema de combos:\n"
             "    - Combo x1.25 a partir de 2 palabras seguidas.\n"
             "    - Combo x1.5 a partir de 6 palabras seguidas.\n"
             "    - Combo x2 a partir de 10 palabras seguidas.\n"
@@ -247,10 +252,10 @@ class MenuHexaLink:
             "    - Normal: combo < 5\n"
             "    - Azul: combo 5 a 9\n"
             "    - Violeta: combo 10 o más\n"
-            "• Puedes pausar el juego, guardar tu partida y reanudarla luego.\n"
-            "• El botón de música permite activar/desactivar la música de fondo.\n"
-            "• Al completar todas las palabras, verás tu puntaje y el ranking de los mejores.\n"
-            "\n¡Diviértete y desafía tu vocabulario!"
+            "• Puedes pausar el juego, guardar tu partida y unpausela luego.\n"
+            "• El botón de música permite activar/desactivar la música de \nfondo.\n"
+            "• Al completar todas las palabras, verás tu puntaje y el ranking \nde los mejores.\n"
+            "\n¡Buena suerte consiguiendo el mejor puntaje! :)"
         )
         texto = ctk.CTkTextbox(win, width=480, height=340, font=ctk.CTkFont(size=16), fg_color="#1e2a38", text_color="#FFFFFF")
         texto.insert("1.0", explicacion)

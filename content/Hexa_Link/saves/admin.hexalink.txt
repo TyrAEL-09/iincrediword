@@ -1,5 +1,5 @@
 {
-  "raw_letters": [
+  "letras_base": [
     "r",
     "j",
     "e",
@@ -8,8 +8,8 @@
     "c",
     "t"
   ],
-  "center_letter": "a",
-  "valid_words": [
+  "letra_central": "a",
+  "pals_validas": [
     "escasa",
     "trae",
     "seca",
@@ -69,20 +69,20 @@
     "estar"
   ],
   "target_count": 57,
-  "found_words": [
+  "pal_encontradas": [
     "carta",
     "rata"
   ],
-  "current_word": "",
+  "pal_actual": "",
   "score": 200,
-  "combo_count": 2,
+  "combo_cont": 2,
   "combo_msg": "COMBO ACTIVADO: x1.25, RACHA DE 2 PALABRAS!",
   "combo_timer": 77043,
-  "paused": true,
-  "paused_time_total": 0,
+  "pausado": true,
+  "pausado_time_total": 0,
   "pause_start": 78602,
   "start_time": 59037,
-  "letters": [
+  "letras": [
     "r",
     "j",
     "e",
@@ -91,7 +91,7 @@
     "c",
     "t"
   ],
-  "positions": [
+  "posiciones": [
     [
       403.92304845413264,
       233.0
@@ -121,7 +121,7 @@
       143.0
     ]
   ],
-  "valid_by_initial": {
+  "por_inicial": {
     "e": [
       "escasa",
       "estas",

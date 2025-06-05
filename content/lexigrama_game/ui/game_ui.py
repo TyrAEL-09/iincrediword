@@ -3,11 +3,13 @@ import tkinter as tk
 from tkinter import PhotoImage, Frame, Label, Button, Entry, SOLID, RAISED, DISABLED, NORMAL, END
 from typing import List, Tuple, Optional, Dict, Set
 from PIL import Image, ImageTk
-from config.settings import UI_SETTINGS # Asegúrate de importar UI_SETTINGS
+from ..config.settings import UI_SETTINGS
+import os
 
 class GameUI:
     """Gestiona la creación y actualización de la interfaz de usuario del juego."""
 
+    # --- Inicialización y configuración ---
     def __init__(self, root: tk.Tk, ui_settings, on_cell_click, on_submit_word, on_pause_toggle, on_music_toggle, on_clear_selection, on_how_to_play_game_click, on_back_to_menu_and_save):
         self.root = root
         self.ui_settings = ui_settings
@@ -27,30 +29,67 @@ class GameUI:
         self.frame_lista = tk.Frame(root, bg=self.ui_settings.COLORS['bg'])
 
         # Atributo para almacenar el estado de la música
-        self.music_on = False # Inicialmente asumimos que la música está apagada
+        self.music_on = False
 
         self._create_game_widgets()
 
-    def _on_button_enter(self, event):
-        """Cambia el color de fondo del botón cuando el cursor entra."""
-        event.widget.config(
-            bg=self.ui_settings.COLORS.get('button_hover_bg', self.ui_settings.COLORS['button_bg']),
-            fg=self.ui_settings.COLORS.get('button_hover_fg', self.ui_settings.COLORS['button_fg'])
-        )
-
-    def _on_button_leave(self, event):
-        """Restaura el color de fondo del botón cuando el cursor sale."""
-        event.widget.config(
-            bg=self.ui_settings.COLORS['button_bg'],
-            fg=self.ui_settings.COLORS['button_fg']
-        )
-
+    # --- Creación de widgets ---
     def _create_game_widgets(self):
         """Crea los widgets principales de la interfaz de juego."""
         font_ui_tuple = (self.ui_settings.MAIN_FONT_FAMILY, self.ui_settings.UI_FONT_SIZE)
         font_ui_bold_tuple = (self.ui_settings.MAIN_FONT_FAMILY, self.ui_settings.UI_FONT_SIZE, "bold")
-        
         font_special_button = (self.ui_settings.MAIN_FONT_FAMILY, self.ui_settings.UI_FONT_SIZE, "bold")
+
+        hover_bg = self.ui_settings.COLORS.get('button_hover_bg', '#00ffff')
+        normal_bg = self.ui_settings.COLORS['button_bg']
+        hover_fg = self.ui_settings.COLORS.get('button_hover_fg', self.ui_settings.COLORS['button_fg'])
+        normal_fg = self.ui_settings.COLORS['button_fg']
+
+        # Rutas de imágenes para los botones
+        boton_img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../recursos/boton_gris.png"))
+        boton_hover_img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../recursos/boton_cyan.png"))
+
+        # Tamaño estándar para todos los botones principales
+        button_width = 120
+        button_height = 40
+
+        self.button_submit = self._create_image_button(
+            self.frame_input, boton_img_path, "Enviar", self.on_submit_word_callback,
+            width=button_width, height=button_height, hover_image_path=boton_hover_img_path
+        )
+        self.button_submit.grid(row=2, column=0, padx=(10,5), pady=(10,5), sticky="ew")
+
+        self.button_clear = self._create_image_button(
+            self.frame_input, boton_img_path, "Limpiar", self.on_clear_selection_callback,
+            width=button_width, height=button_height, hover_image_path=boton_hover_img_path
+        )
+        self.button_clear.grid(row=2, column=1, padx=(5,5), pady=(10,5), sticky="ew")
+
+        self.button_music_game = self._create_image_button(
+            self.frame_input, boton_img_path, "Música: ON", self.on_music_toggle_callback,
+            width=button_width, height=button_height, hover_image_path=boton_hover_img_path
+        )
+        self.button_music_game.grid(row=2, column=2, padx=(5,10), pady=(10,5), sticky="ew")
+
+        # Fila 2: ¿Cómo jugar? y Pausar
+        self.button_how_to_play_game = self._create_image_button(
+            self.frame_input, boton_img_path, "?", self.on_how_to_play_game_click,
+            width=button_width, height=button_height, hover_image_path=boton_hover_img_path
+        )
+        self.button_how_to_play_game.grid(row=3, column=0, padx=(10,5), pady=(10,5), sticky="ew")
+
+        self.button_pause_game = self._create_image_button(
+            self.frame_input, boton_img_path, "Pausar", self.on_pause_toggle_callback,
+            width=button_width, height=button_height, hover_image_path=boton_hover_img_path
+        )
+        self.button_pause_game.grid(row=3, column=1, padx=(5,5), pady=(10,5), sticky="ew")
+
+        # Fila 3: Volver al menú (ocupa dos columnas)
+        self.button_back_to_menu = self._create_image_button(
+            self.frame_input, boton_img_path, "Volver al Menú", self.on_back_to_menu_and_save_callback,
+            width=button_width*2+10, height=button_height, hover_image_path=boton_hover_img_path
+        )
+        self.button_back_to_menu.grid(row=4, column=0, columnspan=2, padx=(10,5), pady=(15,5), sticky="ew")
 
         self.label_status = tk.Label(
             self.frame_input, text="Palabras: 0/0 | Puntuación: 0",
@@ -73,71 +112,48 @@ class GameUI:
         self.entry.bind('<Return>', lambda e: self.on_submit_word_callback())
         self.entry.bind('<KeyRelease>', self._capitalize_entry_text)
 
-        self.button_submit = tk.Button(
-            self.frame_input, text="Enviar", command=self.on_submit_word_callback,
-            font=font_ui_bold_tuple, bg=self.ui_settings.COLORS['button_bg'], fg=self.ui_settings.COLORS['button_fg'],
-            relief=tk.RAISED, borderwidth=2
+        # Fila 1: Enviar, Limpiar, Música
+        self.button_submit = self._create_image_button(
+            self.frame_input, boton_img_path, "Enviar", self.on_submit_word_callback,
+            width=120, height=40, hover_image_path=boton_hover_img_path
         )
-        self.button_submit.grid(row=2, column=0, columnspan=2, padx=(5,2), pady=5, sticky="ew")
-        self.button_submit.bind("<Enter>", self._on_button_enter)
-        self.button_submit.bind("<Leave>", self._on_button_leave)
+        self.button_submit.grid(row=2, column=0, padx=(5,2), pady=5, sticky="ew")
 
-        self.button_clear = tk.Button(
-            self.frame_input, text="Limpiar", command=self.on_clear_selection_callback,
-            font=font_ui_bold_tuple, bg=self.ui_settings.COLORS['button_bg'], fg=self.ui_settings.COLORS['button_fg'],
-            relief=tk.RAISED, borderwidth=2
+        self.button_clear = self._create_image_button(
+            self.frame_input, boton_img_path, "Limpiar", self.on_clear_selection_callback,
+            width=120, height=40, hover_image_path=boton_hover_img_path
         )
-        self.button_clear.grid(row=2, column=2, padx=(2,5), pady=5, sticky="ew")
-        self.button_clear.bind("<Enter>", self._on_button_enter)
-        self.button_clear.bind("<Leave>", self._on_button_leave)
+        self.button_clear.grid(row=2, column=1, padx=(2,2), pady=5, sticky="ew")
 
-        self.button_pause_game = tk.Button(
-            self.frame_input, text="Pausar", command=self.on_pause_toggle_callback,
-            font=font_ui_bold_tuple, bg=self.ui_settings.COLORS['button_bg'], fg=self.ui_settings.COLORS['button_fg'],
-            relief=tk.RAISED, borderwidth=2
+        # Botón de música igual que en el menú (texto y tamaño)
+        self.button_music_game = self._create_image_button(
+            self.frame_input, boton_img_path, "Música: ON", self.on_music_toggle_callback,
+            width=120, height=40, hover_image_path=boton_hover_img_path
         )
-        self.button_pause_game.grid(row=3, column=0, columnspan=1, pady=5, sticky="ew", padx=(5,2))
-        self.button_pause_game.bind("<Enter>", self._on_button_enter)
-        self.button_pause_game.bind("<Leave>", self._on_button_leave)
+        self.button_music_game.grid(row=2, column=2, padx=(5,10), pady=(10,5), sticky="ew")
 
-        # Modificación del botón de música
-        self.button_music_game = tk.Button(
-            self.frame_input, text="♬", 
-            command=self.on_music_toggle_callback,
-            font=font_special_button, # Usar la fuente común para botones especiales
-            bg=self.ui_settings.COLORS['button_bg'], fg=self.ui_settings.COLORS['button_fg'],
-            relief=tk.RAISED, borderwidth=2,
-            width=2, height=1 # Establecer un ancho y alto explícito para hacerlo cuadrado
+        # Fila 2: ¿Cómo jugar? y Pausar
+        button_width = 120
+        button_height = 40
+
+        self.button_how_to_play_game = self._create_image_button(
+            self.frame_input, boton_img_path, "?", self.on_how_to_play_game_click,
+            width=button_width, height=button_height, hover_image_path=boton_hover_img_path
         )
-        self.button_music_game.grid(row=3, column=1, columnspan=2, pady=5, sticky="ew", padx=(2,5))
-        self.button_music_game.bind("<Enter>", self._on_button_enter)
-        self.button_music_game.bind("<Leave>", self._on_button_leave)
+        self.button_how_to_play_game.grid(row=3, column=0, padx=(10,5), pady=(10,5), sticky="ew")
 
-        # Crear un frame para los botones de la esquina inferior derecha
-        self.frame_bottom_right_buttons = tk.Frame(self.frame_input, bg=self.ui_settings.COLORS['bg'])
-        self.frame_bottom_right_buttons.grid(row=4, column=0, columnspan=3, pady=5, sticky="se")
-
-        # Botón "Cómo Jugar" dentro del nuevo frame, cuadrado y con "?"
-        self.button_how_to_play_game = tk.Button(
-            self.frame_bottom_right_buttons, text="?", command=self.on_how_to_play_game_click,
-            font=font_special_button, # Usar la fuente común para botones especiales
-            bg=self.ui_settings.COLORS['button_bg'], fg=self.ui_settings.COLORS['button_fg'],
-            relief=tk.RAISED, borderwidth=2,
-            width=2, height=1 # Establecer un ancho y alto explícito para hacerlo cuadrado
+        self.button_pause_game = self._create_image_button(
+            self.frame_input, boton_img_path, "Pausar", self.on_pause_toggle_callback,
+            width=button_width, height=button_height, hover_image_path=boton_hover_img_path
         )
-        self.button_how_to_play_game.pack(side=tk.LEFT, padx=(5,2))
-        self.button_how_to_play_game.bind("<Enter>", self._on_button_enter)
-        self.button_how_to_play_game.bind("<Leave>", self._on_button_leave)
+        self.button_pause_game.grid(row=3, column=1, padx=(5,5), pady=(10,5), sticky="ew")
 
-        # Botón "Volver al Menú" dentro del nuevo frame
-        self.button_back_to_menu = tk.Button(
-            self.frame_bottom_right_buttons, text="Volver al Menú", command=self.on_back_to_menu_and_save_callback,
-            font=font_ui_bold_tuple, bg=self.ui_settings.COLORS['button_bg'], fg=self.ui_settings.COLORS['button_fg'],
-            relief=tk.RAISED, borderwidth=2
+        # Fila 3: Volver al menú (ocupa dos columnas)
+        self.button_back_to_menu = self._create_image_button(
+            self.frame_input, boton_img_path, "Volver al Menú", self.on_back_to_menu_and_save_callback,
+            width=button_width*2+10, height=button_height, hover_image_path=boton_hover_img_path
         )
-        self.button_back_to_menu.pack(side=tk.LEFT, padx=(2,5), fill="x", expand=True)
-        self.button_back_to_menu.bind("<Enter>", self._on_button_enter)
-        self.button_back_to_menu.bind("<Leave>", self._on_button_leave)
+        self.button_back_to_menu.grid(row=4, column=0, columnspan=2, padx=(10,5), pady=(15,5), sticky="ew")
 
         self.label_message = tk.Label(
             self.frame_input, text="", font=font_ui_tuple,
@@ -149,10 +165,102 @@ class GameUI:
         self.frame_input.grid_columnconfigure(1, weight=1)
         self.frame_input.grid_columnconfigure(2, weight=1)
 
-        self.frame_bottom_right_buttons.grid_columnconfigure(0, weight=1)
-        
-        # Llama a update_music_button_text al inicio para establecer el estado inicial correcto del icono
+        # Estado inicial del icono de música
         self.update_music_button_text(self.music_on)
+
+    def _set_canvas_button_state(self, canvas, state="normal"):
+        """Simula habilitar o deshabilitar un botón Canvas."""
+        canvas.state = state
+        if state == "disabled":
+            canvas.unbind("<Button-1>")
+            canvas.config(cursor="arrow")
+            canvas.itemconfig(canvas.text_id, fill="#888888")
+        else:
+            canvas.bind("<Button-1>", lambda e: canvas.command())
+            canvas.config(cursor="hand2")
+            canvas.itemconfig(canvas.text_id, fill=self.ui_settings.COLORS['button_fg'])
+
+    def set_canvas_button_text(self, canvas, text):
+        """Cambia el texto de un botón Canvas."""
+        canvas.itemconfig(canvas.text_id, text=text)
+
+    def _create_image_button(self, parent, image_path, text, command, width=150, height=50, hover_image_path=None):
+        """Crea un botón personalizado usando Canvas con imagen y texto, con efecto hover."""
+        canvas = tk.Canvas(parent, width=width, height=height, highlightthickness=0, bg=self.ui_settings.COLORS['bg'])
+        try:
+            img = Image.open(image_path)
+            img = img.resize((width, height), Image.Resampling.LANCZOS)
+            tk_img = ImageTk.PhotoImage(img)
+            canvas.normal_img = tk_img  # Mantener referencia
+            canvas.create_image(0, 0, anchor='nw', image=tk_img)
+        except Exception as e:
+            print(f"Error al cargar imagen para botón: {e}")
+
+        # Imagen hover
+        if hover_image_path:
+            try:
+                hover_img = Image.open(hover_image_path)
+                hover_img = hover_img.resize((width, height), Image.Resampling.LANCZOS)
+                tk_hover_img = ImageTk.PhotoImage(hover_img)
+                canvas.hover_img = tk_hover_img
+            except Exception as e:
+                print(f"Error al cargar imagen hover para botón: {e}")
+                canvas.hover_img = None
+        else:
+            canvas.hover_img = None
+
+        # Texto centrado
+        canvas.text_id = canvas.create_text(width//2, height//2, text=text, fill=self.ui_settings.COLORS['button_fg'],
+                          font=(self.ui_settings.MAIN_FONT_FAMILY, self.ui_settings.UI_FONT_SIZE, "bold"))
+
+        # Guardar el comando y estado
+        canvas.command = command
+        canvas.state = "normal"
+
+        # Evento de click
+        def on_click(event=None):
+            if canvas.state == "normal" and callable(canvas.command):
+                canvas.command()
+        canvas.bind("<Button-1>", on_click)
+
+        # Efecto hover con imagen
+        def on_enter(e):
+            if canvas.state == "normal":
+                canvas.config(cursor="hand2")
+                if canvas.hover_img:
+                    canvas.itemconfig(1, image=canvas.hover_img)
+        def on_leave(e):
+            if canvas.state == "normal":
+                canvas.config(cursor="")
+                if hasattr(canvas, 'normal_img'):
+                    canvas.itemconfig(1, image=canvas.normal_img)
+        canvas.bind("<Enter>", on_enter)
+        canvas.bind("<Leave>", on_leave)
+
+        # Permitir habilitar/deshabilitar el botón desde .config(state=...)
+        def config_proxy(**kwargs):
+            if "state" in kwargs:
+                canvas.state = kwargs["state"]
+                if canvas.state == "disabled":
+                    canvas.config(cursor="arrow")
+                else:
+                    canvas.config(cursor="")
+        canvas.config = config_proxy
+
+        return canvas
+
+    # --- Métodos utilitarios privados ---
+    def _add_hover_effect(self, button, hover_bg, normal_bg, hover_fg=None, normal_fg=None):
+        def on_enter(e):
+            button.config(bg=hover_bg)
+            if hover_fg:
+                button.config(fg=hover_fg)
+        def on_leave(e):
+            button.config(bg=normal_bg)
+            if normal_fg:
+                button.config(fg=normal_fg)
+        button.bind("<Enter>", on_enter)
+        button.bind("<Leave>", on_leave)
 
     def _capitalize_entry_text(self, event):
         current_text = self.entry.get()
@@ -161,9 +269,9 @@ class GameUI:
             self.entry.delete(0, tk.END)
             self.entry.insert(0, capitalized_text)
 
+    # --- Métodos de interfaz pública: mostrar/ocultar frames ---
     def show_game_interface(self):
-        """Muestra los frames de la interfaz de juego y oculta otros.
-        Establece el tamaño de la ventana a una dimensión más pequeña y cuadrada."""
+        """Muestra los frames de la interfaz de juego y oculta otros."""
         desired_width = 750
         desired_height = 750
 
@@ -178,12 +286,7 @@ class GameUI:
         self.root.grid_rowconfigure(0, weight=3)
         self.root.grid_rowconfigure(1, weight=1)
 
-        self.entry.config(state=NORMAL)
-        self.button_submit.config(state=NORMAL)
-        self.button_clear.config(state=NORMAL)
-        self.button_pause_game.config(state=NORMAL, text="Pausar")
-        self.button_back_to_menu.config(state=NORMAL)
-        self.entry.focus_set()
+        self.enable_game_controls()
 
     def hide_game_interface(self):
         """Oculta los frames de la interfaz de juego."""
@@ -191,6 +294,7 @@ class GameUI:
         self.frame_input.grid_remove()
         self.frame_lista.grid_remove()
 
+    # --- Métodos de actualización visual del tablero y lista de palabras ---
     def display_board(self, board: List[List[str]], current_selection_path: List[Tuple[int, int]]):
         """Dibuja o actualiza el tablero de letras."""
         for widget in self.frame_sopa.winfo_children():
@@ -198,9 +302,9 @@ class GameUI:
         self.grid_cell_widgets = [[None for _ in range(len(board[0]))] for _ in range(len(board))]
         font_grid_tuple = (self.ui_settings.MAIN_FONT_FAMILY, self.ui_settings.GRID_LETTER_FONT_SIZE, "bold")
 
-        for r_idx, row_letters in enumerate(board):
+        for r_idx, row_letras in enumerate(board):
             self.frame_sopa.grid_rowconfigure(r_idx, weight=1)
-            for c_idx, letter in enumerate(row_letters):
+            for c_idx, letter in enumerate(row_letras):
                 self.frame_sopa.grid_columnconfigure(c_idx, weight=1)
                 cell_bg = self.ui_settings.COLORS['selected_cell_bg'] if (r_idx, c_idx) in current_selection_path else self.ui_settings.COLORS['grid']
                 cell_button = tk.Button(
@@ -227,7 +331,7 @@ class GameUI:
                 if self.grid_cell_widgets[r_idx][c_idx]:
                     self.grid_cell_widgets[r_idx][c_idx].config(bg=self.ui_settings.COLORS['selected_cell_bg'])
 
-    def display_word_list(self, words_by_length: Dict[int, List[str]], found_words: Set[str]):
+    def display_word_list(self, words_by_length: Dict[int, List[str]], pal_encontradas: Set[str]):
         """Dibuja o actualiza la lista de palabras a encontrar."""
         for widget in self.frame_lista.winfo_children():
             widget.destroy()
@@ -252,7 +356,7 @@ class GameUI:
                 word_hint_container = tk.Frame(self.frame_lista, bg=self.ui_settings.COLORS['bg'])
                 word_hint_container.pack(pady=2, padx=5, anchor="w")
                 letter_box_labels_for_word = []
-                is_found = word_str.upper() in found_words
+                is_found = word_str.upper() in pal_encontradas
                 for idx, char_in_palabra in enumerate(word_str):
                     box_text = char_in_palabra.upper() if is_found else ""
                     if not is_found and idx == 0:
@@ -278,6 +382,7 @@ class GameUI:
                 if i < len(word):
                     box_label.config(text=word[i].upper(), fg=self.ui_settings.COLORS['found_word_fg'])
 
+    # --- Métodos de actualización visual de etiquetas y mensajes ---
     def update_status_labels(self, found_count: int, target_count: int, score: int):
         """Actualiza las etiquetas de estado del juego."""
         status_text = f"Palabras: {found_count}/{target_count} | Puntos: {score}"
@@ -295,6 +400,7 @@ class GameUI:
         """Borra el mensaje temporal."""
         self.label_message.config(text="")
 
+    # --- Métodos de entrada de usuario ---
     def get_entered_word(self) -> str:
         """Obtiene el texto del campo de entrada."""
         return self.entry.get().strip().upper()
@@ -308,23 +414,27 @@ class GameUI:
         self.entry.delete(0, END)
         self.entry.insert(0, text)
 
-    def update_music_button_text(self, music_is_on: bool):
-        """Actualiza el texto del botón de música en la interfaz de juego
-        para mostrar una clave de sol o una clave de sol tachada."""
-        self.music_on = music_is_on # Actualiza el estado interno
+    # --- Métodos de control de botones ---
+    def update_music_button_text(self, music_is_on):
+        """Actualiza el texto del botón de música en la interfaz de juego."""
+        is_on = music_is_on
+        if isinstance(music_is_on, str):
+            is_on = "ON" in music_is_on
+        self.music_on = is_on
+        # Cambia el texto igual que en el menú
         if self.music_on:
-            self.button_music_game.config(text="♬") # Clave de sol
+            self.set_canvas_button_text(self.button_music_game, "Música: ON")
         else:
-            self.button_music_game.config(text="♬̷") # Clave de sol tachada (combinando U+266C con U+0338)
+            self.set_canvas_button_text(self.button_music_game, "Música: OFF")
 
     def enable_game_controls(self):
         """Habilita los controles del juego (entrada, botones, tablero)."""
         self.entry.config(state=NORMAL)
-        self.button_submit.config(state=NORMAL)
-        self.button_clear.config(state=NORMAL)
-        self.button_pause_game.config(state=NORMAL, text="Pausar")
-        self.button_back_to_menu.config(state=NORMAL)
-        self.button_music_game.config(state=NORMAL) # Asegúrate de habilitar el botón de música
+        self._set_canvas_button_state(self.button_submit, "normal")
+        self._set_canvas_button_state(self.button_clear, "normal")
+        self._set_canvas_button_state(self.button_pause_game, "normal")
+        self._set_canvas_button_state(self.button_back_to_menu, "normal")
+        self._set_canvas_button_state(self.button_music_game, "normal")
         if self.grid_cell_widgets:
             for row_widgets in self.grid_cell_widgets:
                 for widget_cell in row_widgets:
@@ -332,14 +442,33 @@ class GameUI:
         self.entry.focus_set()
 
     def disable_game_controls(self):
-        """Deshabilita los controles del juego (entrada, botones, tablero)."""
+        """Deshabilita los controles del juego (entrada, botones, tablero), excepto el botón de volver al menú y el de pausa."""
         self.entry.config(state=DISABLED)
-        self.button_submit.config(state=DISABLED)
-        self.button_clear.config(state=DISABLED)
-        self.button_pause_game.config(text="Reanudar")
-        self.button_back_to_menu.config(state=DISABLED)
-        self.button_music_game.config(state=DISABLED) # Asegúrate de deshabilitar el botón de música
+        self._set_canvas_button_state(self.button_submit, "disabled")
+        self._set_canvas_button_state(self.button_clear, "disabled")
+        # No deshabilitar el botón de pausa ni el de volver al menú:
+        # self._set_canvas_button_state(self.button_pause_game, "disabled")
+        # self._set_canvas_button_state(self.button_back_to_menu, "disabled")
+        self._set_canvas_button_state(self.button_music_game, "disabled")
         if self.grid_cell_widgets:
             for row_widgets in self.grid_cell_widgets:
                 for widget_cell in row_widgets:
                     if widget_cell: widget_cell.config(state=DISABLED)
+
+    def show_game_interface(self):
+        """Muestra los frames de la interfaz de juego y oculta otros."""
+        desired_width = 750
+        desired_height = 750
+
+        self.root.geometry(f"{desired_width}x{desired_height}")
+
+        self.frame_sopa.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
+        self.frame_lista.grid(row=0, column=1, rowspan=2, sticky='ns', padx=10, pady=10)
+        self.frame_input.grid(row=1, column=0, sticky='ew', padx=10, pady=(5,10))
+
+        self.root.grid_columnconfigure(0, weight=3)
+        self.root.grid_columnconfigure(1, weight=1)
+        self.root.grid_rowconfigure(0, weight=3)
+        self.root.grid_rowconfigure(1, weight=1)
+
+        self.enable_game_controls()

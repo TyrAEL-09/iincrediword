@@ -8,24 +8,29 @@ class WordGenerator:
     y la generación del tablero de letras (sopa de letras).
     """
     def __init__(self, game_settings):
+        # Inicializa el generador de palabras con la configuración del juego.
         self.game_settings = game_settings
-        self.all_words_by_length: Dict[int, List[str]] = {}
-        self.selected_target_words: List[str] = [] # Las palabras que deben ser encontradas
+        # Carga las palabras desde el archivo especificado en la configuración.
+        self.palabras_completo_by_length: Dict[int, List[str]] = {}
+        # Lista para almacenar las palabras objetivo seleccionadas.
+        self.selected_target_words: List[str] = []
+        # Tablero generado, inicialmente None hasta que se genere uno exitosamente.
         self.generated_board: Optional[List[List[str]]] = None
 
-    def _load_words_from_file(self, filename: str) -> bool:
+    def _cargar_pals_from_file(self, filename: str) -> bool:
         """Carga palabras desde un archivo y las clasifica por longitud."""
         try:
+            # Abre el archivo y lee las palabras, eliminando espacios y convirtiéndolas a mayúsculas
             with open(filename, "r", encoding="utf-8") as file:
-                all_words_list = [line.strip().upper() for line in file if line.strip() and len(line.strip()) > 1]
-            self.all_words_by_length.clear()
-            for word in all_words_list:
+                palabras_completo_list = [line.strip().upper() for line in file if line.strip() and len(line.strip()) > 1]
+            self.palabras_completo_by_length.clear()
+
+            # Clasifica las palabras por longitud
+            for word in palabras_completo_list:
                 length = len(word)
-                self.all_words_by_length.setdefault(length, []).append(word)
-            # Convertir sets a listas para que sean mutables si se desea remover palabras
-            # Aunque en este caso se usa una copia temporal en select_candidate_words
-            for length in self.all_words_by_length:
-                random.shuffle(self.all_words_by_length[length])
+                self.palabras_completo_by_length.setdefault(length, []).append(word)
+            for length in self.palabras_completo_by_length:
+                random.shuffle(self.palabras_completo_by_length[length])
             return True
         except FileNotFoundError:
             print(f"Error Crítico: No se encontró el archivo de palabras '{filename}'.")
@@ -37,11 +42,11 @@ class WordGenerator:
         Intenta cumplir la distribución y si no, completa con palabras aleatorias.
         """
         selected_words_set = set()
-        temp_words_by_length = {k: list(v) for k, v in self.all_words_by_length.items()}
+        temp_words_by_length = {k: list(v) for k, v in self.palabras_completo_by_length.items()}
 
         for length, desired_count in self.game_settings.WORD_DISTRIBUTION.items():
             available_for_length = temp_words_by_length.get(length, [])
-            random.shuffle(available_for_length) # Mezclar para una selección aleatoria
+            random.shuffle(available_for_length)
             count_added = 0
             for word in available_for_length:
                 if count_added < desired_count and word not in selected_words_set:
@@ -50,7 +55,6 @@ class WordGenerator:
             if count_added < desired_count:
                 print(f"Advertencia: No se pudieron seleccionar {desired_count} palabras de {length} letras. Se encontraron {count_added}.")
 
-        # Si el número de palabras seleccionadas no coincide con el objetivo, ajustar
         if len(selected_words_set) < self.game_settings.TARGET_WORDS_COUNT:
             needed_more = self.game_settings.TARGET_WORDS_COUNT - len(selected_words_set)
             all_remaining_flat = []
@@ -73,8 +77,6 @@ class WordGenerator:
         """Devuelve las celdas adyacentes a una posición (r, c)."""
         adjacents = []
         directions = [(-1, 0), (1, 0), (0, -1), (0, 1)] # Arriba, Abajo, Izquierda, Derecha
-        # También se pueden incluir diagonales si el juego lo permite:
-        # directions = [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)]
         for dr, dc in directions:
             nr, nc = r + dr, c + dc
             if 0 <= nr < rows and 0 <= nc < cols:
@@ -144,13 +146,13 @@ class WordGenerator:
 
     def _fill_empty_cells(self, board: List[List[str]]):
         """Rellena las celdas vacías del tablero con letras aleatorias."""
-        common_letters = 'AEIOULNSTRDCMBPGVHFYQJZXKW' # Frecuencia común en español
-        all_letters_in_target_words = set()
+        common_letras = 'AEIOULNSTRDCMBPGVHFYQJZXKW' # Frecuencia común en español
+        all_letras_in_target_words = set()
         for word in self.selected_target_words:
-            all_letters_in_target_words.update(word.upper())
+            all_letras_in_target_words.update(word.upper())
 
         # Pool de letras para relleno, priorizando las del vocabulario del juego
-        fill_letter_pool = list(all_letters_in_target_words) * 2 + list('AEIOU') * 2 + list(common_letters)
+        fill_letter_pool = list(all_letras_in_target_words) * 2 + list('AEIOU') * 2 + list(common_letras)
         random.shuffle(fill_letter_pool)
 
         for r_idx in range(len(board)):
@@ -159,27 +161,27 @@ class WordGenerator:
                     if fill_letter_pool:
                         board[r_idx][c_idx] = random.choice(fill_letter_pool)
                     else: # Si se acaban las letras del pool, usar las comunes
-                        board[r_idx][c_idx] = random.choice(common_letters)
+                        board[r_idx][c_idx] = random.choice(common_letras)
 
     def generate_game_board(self) -> Optional[List[List[str]]]:
         """
         Intenta generar un tablero de sopa de letras con las palabras objetivo.
         Retorna el tablero generado o None si falla tras múltiples intentos.
         """
-        if not self._load_words_from_file(self.game_settings.WORD_FILE):
+        if not self._cargar_pals_from_file(self.game_settings.WORD_FILE):
             return None
 
         for global_attempt_idx in range(self.game_settings.MAX_GLOBAL_GENERATION_ATTEMPTS):
-            print(f"Intento global de generación de tablero: {global_attempt_idx + 1}")
+            #print(f"Intento global de generación de tablero: {global_attempt_idx + 1}")
             self.selected_target_words = self._select_candidate_words()
             if not self.selected_target_words or len(self.selected_target_words) != self.game_settings.TARGET_WORDS_COUNT:
-                print(f"No se pudieron seleccionar {self.game_settings.TARGET_WORDS_COUNT} palabras objetivo en este intento global.")
+                #print(f"No se pudieron seleccionar {self.game_settings.TARGET_WORDS_COUNT} palabras objetivo en este intento global.")
                 continue # Reintentar con otra selección de palabras
 
             rows, cols = self.game_settings.GRID_SIZE
             current_board = self._create_empty_board(rows, cols)
             words_successfully_placed = []
-            all_words_placed_in_current_attempt = True
+            palabras_completo_placed_in_current_attempt = True
 
             # Ordenar palabras por longitud descendente para intentar colocar las más largas primero
             words_to_place_ordered = sorted(list(set(self.selected_target_words)), key=len, reverse=True)
@@ -193,7 +195,7 @@ class WordGenerator:
                     if replacement_attempt > 0: # Para intentos de reemplazo, buscar otra palabra
                         length_needed = len(original_word_for_slot)
                         possible_replacements = [
-                            w for w in self.all_words_by_length.get(length_needed, [])
+                            w for w in self.palabras_completo_by_length.get(length_needed, [])
                             if w not in words_successfully_placed and
                                w not in words_already_tried_for_this_slot
                         ]
@@ -202,7 +204,6 @@ class WordGenerator:
                             word_to_attempt_placement = possible_replacements[0]
                             words_already_tried_for_this_slot.add(word_to_attempt_placement)
                         else:
-                            # No hay más reemplazos disponibles para esta longitud
                             break
 
                     if self._place_word_on_board(current_board, word_to_attempt_placement):
@@ -211,19 +212,19 @@ class WordGenerator:
                         break # Palabra colocada, pasar a la siguiente ranura
 
                 if not word_placed_for_slot:
-                    all_words_placed_in_current_attempt = False
+                    palabras_completo_placed_in_current_attempt = False
                     break # No se pudo colocar esta palabra ni sus reemplazos, falló el intento
 
-            if all_words_placed_in_current_attempt and \
+            if palabras_completo_placed_in_current_attempt and \
                len(set(words_successfully_placed)) == len(set(self.selected_target_words)):
                 self.selected_target_words = list(set(words_successfully_placed)) # Actualizar con las que realmente se colocaron
                 self._fill_empty_cells(current_board)
                 self.generated_board = current_board
-                print(f"Tablero generado exitosamente en el intento global {global_attempt_idx + 1}.")
+                #print(f"Tablero generado exitosamente en el intento global {global_attempt_idx + 1}.")
                 self._print_word_distribution(self.selected_target_words)
                 return self.generated_board
 
-        print(f"Falló la generación del tablero tras {self.game_settings.MAX_GLOBAL_GENERATION_ATTEMPTS} intentos globales.")
+        #print(f"Falló la generación del tablero tras {self.game_settings.MAX_GLOBAL_GENERATION_ATTEMPTS} intentos globales.")
         self.selected_target_words = [] # Limpiar palabras objetivo si no se pudo generar el tablero
         return None
 
