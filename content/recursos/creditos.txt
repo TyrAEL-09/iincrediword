@@ -1,0 +1,59 @@
+________________________________________
+Créditos de Desarrollo
+Director General:
+Ismael Ibarra
+________________________________________
+Dirección de Arte, HexaLink:
+Santiago Pérez
+Dirección de Arte, LexiGrama:
+Arami Romero
+________________________________________
+Dirección Lógica, HexaLink:
+Santiago Pérez
+Ismael Ibarra
+Dirección Lógica, LexiGrama:
+Arami Romero
+Joaquín Onieva
+Elías López
+________________________________________
+Sistema de Guardado:
+LexiGrama: Arami Romero, Joaquín Onieva
+HexaLink: Ismael Ibarra, Santiago Pérez
+________________________________________
+Diseño de Interfaz, Menú Principal:
+Elías López
+Lógica del Menú Principal:
+Ismael Ibarra
+________________________________________
+Integración de Juegos al Menú:
+LexiGrama: Elías López
+Hexalink: Ismael Ibarra
+________________________________________
+Música y Sonido:
+Joaquín Onieva
+Santiago Pérez
+________________________________________
+Testing y Control de Calidad:
+Arami Romero
+Elías López
+________________________________________
+Documentación Técnica:
+Santiago Pérez
+Arami Romero
+Joaquín Onieva
+Elías López
+________________________________________
+Diseño de Experiencia de Usuario (UX):
+Arami Romero
+Elías López
+________________________________________
+
+    Agradecimientos:
+
+    Alejandro Portillo
+ Por prestar su voz para
+      el proyecto
+
+
+       ¡GRACIAS!
+De parte de todo el equipo de:

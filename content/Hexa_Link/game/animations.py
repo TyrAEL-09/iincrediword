@@ -20,9 +20,9 @@ class FireAnimation:
         self.animation_timer = pygame.time.get_ticks()
         self.active = False
 
-    def update(self, combo_count):
+    def update(self, combo_cont):
         # Actualiza el estado de la animación según el combo
-        self.active = combo_count >= 2
+        self.active = combo_cont >= 2
         if self.active:
             if pygame.time.get_ticks() - self.animation_timer > 100:
                 self.current_frame = (self.current_frame + 1) % 6
@@ -30,12 +30,12 @@ class FireAnimation:
         else:
             self.current_frame = 0  # Opcional: reinicia la animación si no está activa
 
-    def draw(self, screen, combo_count=None):
+    def draw(self, screen, combo_cont=None):
         if self.active:
             # Fuego violeta para combo >=10 (x2), azul para 5-9, normal para el resto
-            if combo_count is not None and combo_count >= 10:
+            if combo_cont is not None and combo_cont >= 10:
                 frames = self.violet_frames
-            elif combo_count is not None and combo_count >= 5:
+            elif combo_cont is not None and combo_cont >= 5:
                 frames = self.blue_frames
             else:
                 frames = self.frames

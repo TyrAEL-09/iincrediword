@@ -1,0 +1,262 @@
+{
+  "letras_base": [
+    "r",
+    "e",
+    "t",
+    "i",
+    "a",
+    "o",
+    "n"
+  ],
+  "letra_central": "t",
+  "pals_validas": [
+    "antonio",
+    "tiro",
+    "tira",
+    "entrar",
+    "rato",
+    "tierra",
+    "norte",
+    "trata",
+    "arte",
+    "entran",
+    "entraron",
+    "tratan",
+    "anoten",
+    "anita",
+    "tenian",
+    "anotar",
+    "tanta",
+    "oriente",
+    "raton",
+    "tio",
+    "ante",
+    "tener",
+    "terreno",
+    "entro",
+    "tratar",
+    "retrato",
+    "reto",
+    "entero",
+    "anotaron",
+    "tia",
+    "torno",
+    "entre",
+    "tan",
+    "interior",
+    "tenia",
+    "trae",
+    "intento",
+    "tarea",
+    "tanto",
+    "intenta",
+    "entra",
+    "trato",
+    "rata",
+    "tienen",
+    "anota",
+    "nota",
+    "tania",
+    "tren",
+    "traten",
+    "anterior",
+    "teo",
+    "trono",
+    "tirar",
+    "territorio",
+    "retina",
+    "otra",
+    "torre",
+    "tinta",
+    "teatro",
+    "ten",
+    "otro",
+    "terror",
+    "tiene",
+    "treinta"
+  ],
+  "target_count": 64,
+  "pal_encontradas": [
+    "teo",
+    "tenia",
+    "territorio",
+    "retina",
+    "trono",
+    "tirar",
+    "trae",
+    "intento",
+    "interior",
+    "tarea",
+    "torre",
+    "anotar",
+    "tenian",
+    "antonio",
+    "tira",
+    "entrar",
+    "rato",
+    "tierra",
+    "arte",
+    "tratan",
+    "anoten",
+    "anita",
+    "tanta"
+  ],
+  "pal_actual": "",
+  "score": 3470,
+  "combo_cont": 10,
+  "combo_msg": "COMBO ACTIVADO: x2.0, RACHA DE 10 PALABRAS!",
+  "combo_timer": 219348,
+  "pausado": true,
+  "pausado_time_total": 0,
+  "pause_start": 226416,
+  "start_time": 245,
+  "letras": [
+    "i",
+    "r",
+    "a",
+    "t",
+    "o",
+    "n",
+    "e"
+  ],
+  "posiciones": [
+    [
+      403.92304845413264,
+      233.0
+    ],
+    [
+      351.9615242270663,
+      323.0
+    ],
+    [
+      248.0384757729337,
+      323.0
+    ],
+    [
+      300,
+      233
+    ],
+    [
+      196.07695154586736,
+      233.0
+    ],
+    [
+      248.03847577293365,
+      143.00000000000003
+    ],
+    [
+      351.9615242270663,
+      143.0
+    ]
+  ],
+  "por_inicial": {
+    "a": [
+      "antonio",
+      "arte",
+      "anoten",
+      "anita",
+      "anotar",
+      "ante",
+      "anotaron",
+      "anota",
+      "anterior"
+    ],
+    "t": [
+      "tiro",
+      "tira",
+      "tierra",
+      "trata",
+      "tratan",
+      "tenian",
+      "tanta",
+      "tio",
+      "tener",
+      "terreno",
+      "tratar",
+      "tia",
+      "torno",
+      "tan",
+      "tenia",
+      "trae",
+      "tarea",
+      "tanto",
+      "trato",
+      "tienen",
+      "tania",
+      "tren",
+      "traten",
+      "teo",
+      "trono",
+      "tirar",
+      "territorio",
+      "torre",
+      "tinta",
+      "teatro",
+      "ten",
+      "terror",
+      "tiene",
+      "treinta"
+    ],
+    "e": [
+      "entrar",
+      "entran",
+      "entraron",
+      "entro",
+      "entero",
+      "entre",
+      "entra"
+    ],
+    "r": [
+      "rato",
+      "raton",
+      "retrato",
+      "reto",
+      "rata",
+      "retina"
+    ],
+    "n": [
+      "norte",
+      "nota"
+    ],
+    "o": [
+      "oriente",
+      "otra",
+      "otro"
+    ],
+    "i": [
+      "interior",
+      "intento",
+      "intenta"
+    ]
+  },
+  "btn_shuffle_rect": [
+    276,
+    524,
+    48,
+    48
+  ],
+  "btn_check_rect": [
+    240,
+    463,
+    120,
+    40
+  ],
+  "btn_pause_rect": [
+    532,
+    20,
+    48,
+    48
+  ],
+  "btn_del_rect": [
+    148,
+    528,
+    120,
+    40
+  ],
+  "btn_clear_rect": [
+    332,
+    528,
+    120,
+    40
+  ]
+}

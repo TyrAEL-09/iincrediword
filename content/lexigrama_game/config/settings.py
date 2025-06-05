@@ -1,8 +1,8 @@
 # settings.py
-from pathlib import Path # AÑADIDO
+from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent # AÑADIDO: Apunta a lexigrama_game
-RECURSOS_DIR_GENERAL = BASE_DIR.parent / "recursos" # AÑADIDO: Apunta a content/recursos
+BASE_DIR = Path(__file__).resolve().parent.parent
+RECURSOS_DIR_GENERAL = BASE_DIR.parent / "recursos"
 
 class GameSettings:
     """Configuraciones relacionadas con la lógica del juego."""
@@ -10,12 +10,12 @@ class GameSettings:
     TARGET_WORDS_COUNT = 7
     WORD_DISTRIBUTION = {9: 1, 8: 1, 7: 1, 6: 2, 5: 2}
     MAX_REPLACEMENTS_PER_SLOT = 100
-    MAX_GLOBAL_GENERATION_ATTEMPTS = 10
+    MAX_GLOBAL_GENERATION_ATTEMPTS = 30
     MAX_INTERNAL_BOARD_ATTEMPTS = 20
-    WORD_FILE = BASE_DIR / "palabras.txt" # MODIFICADO: Ruta absoluta
+    WORD_FILE = BASE_DIR / "palabras.txt"
     
-    SAVES_DIR = BASE_DIR / "saves" # AÑADIDO
-    SAVE_FILE_NAME = SAVES_DIR / "partidas_guardadas.json" # MODIFICADO: Ruta absoluta
+    SAVES_DIR = BASE_DIR / "saves" 
+    SAVE_FILE_NAME = SAVES_DIR / "partidas_guardadas.json"
 
 
 class UISettings:
@@ -27,13 +27,14 @@ class UISettings:
     LOGO_MAX_HEIGHT = 300
     
     # Rutas construidas usando RECURSOS_DIR_GENERAL
-    LOGO_PATH = RECURSOS_DIR_GENERAL / "lexigrama.png" # MODIFICADO
-    ICON_PATH = RECURSOS_DIR_GENERAL / "icon.png" # MODIFICADO (asegúrate que "icon.png" exista en content/recursos)
+    LOGO_PATH = RECURSOS_DIR_GENERAL / "lexigrama.png"
+    ICON_PATH = RECURSOS_DIR_GENERAL / "icon.png"
 
+    # Colores utilizados en la interfaz
     COLORS = {
-        'bg': "#1a1a1a",
+        'bg': "#0a0b29",
         'fg': "#FFFFFF",
-        'grid': "#333333",
+        'grid': "#1970a5",
         'grid_fg': "#FFFFFF",
         'button_bg': "#464646",
         'button_fg': "#FFFFFF",
@@ -52,13 +53,13 @@ class UISettings:
     _SOUND_CORRECT_FILENAME = "correcto2.mp3"
     _SOUND_INCORRECT_FILENAME = "roblox_muerte.mp3"
     _MUSIC_BACKGROUND_FILENAME = "lofi_sample.mp3"
-    _SOUND_WINNING_FILENAME = "winning.mp3"
+    _SOUND_WINNING_FILENAME = "level-win-6416.mp3"
 
     # Rutas completas a los sonidos
-    SOUND_CORRECT = RECURSOS_DIR_GENERAL / _SOUND_CORRECT_FILENAME # MODIFICADO
-    SOUND_INCORRECT = RECURSOS_DIR_GENERAL / _SOUND_INCORRECT_FILENAME # MODIFICADO
-    MUSIC_BACKGROUND = RECURSOS_DIR_GENERAL / _MUSIC_BACKGROUND_FILENAME # MODIFICADO
-    SOUND_WINNING = RECURSOS_DIR_GENERAL / _SOUND_WINNING_FILENAME # MODIFICADO
+    SOUND_CORRECT = RECURSOS_DIR_GENERAL / _SOUND_CORRECT_FILENAME
+    SOUND_INCORRECT = RECURSOS_DIR_GENERAL / _SOUND_INCORRECT_FILENAME
+    MUSIC_BACKGROUND = RECURSOS_DIR_GENERAL / _MUSIC_BACKGROUND_FILENAME
+    SOUND_WINNING = RECURSOS_DIR_GENERAL / _SOUND_WINNING_FILENAME 
 
 # Instancias de las configuraciones para fácil acceso
 GAME_SETTINGS = GameSettings()

@@ -1,7 +1,14 @@
 import pygame
 import os
+from .constants import FONT_PATH
 
-def mostrar_menu_victoria(game):
+def menu_victoria(game):
+    # --- APAGAR LA MUSICA DE FONDO ---
+    
+    if pygame.mixer.get_init():
+        pygame.mixer.music.stop()
+
+
     scores = game.guardar_puntaje()
     running = True
     WIDTH, HEIGHT = game.screen.get_size()
@@ -43,13 +50,13 @@ def mostrar_menu_victoria(game):
             game.screen.blit(txt, (WIDTH//2 - board_w//2 + 30, y0 + idx*28))
 
         btn_width, btn_height = 420, 54
-        btn_rect = pygame.Rect(WIDTH//2 - btn_width//2, 180+board_h+30, btn_width, btn_height)
+        boton_rect = pygame.Rect(WIDTH//2 - btn_width//2, 180+board_h+30, btn_width, btn_height) #Define la posición y el tamaño del botón en la pantalla 
         mouse_pos = pygame.mouse.get_pos()
-        btn_color = CENTER_COLOR if btn_rect.collidepoint(mouse_pos) else BUTTON_COLOR
-        pygame.draw.rect(game.screen, btn_color, btn_rect, border_radius=BUTTON_RADIUS)
-        pygame.draw.rect(game.screen, CENTER_COLOR, btn_rect, 2, border_radius=BUTTON_RADIUS)
+        btn_color = CENTER_COLOR if boton_rect.collidepoint(mouse_pos) else BUTTON_COLOR
+        pygame.draw.rect(game.screen, btn_color, boton_rect, border_radius=BUTTON_RADIUS)
+        pygame.draw.rect(game.screen, CENTER_COLOR, boton_rect, 2, border_radius=BUTTON_RADIUS)
         btn_label = FONT_MEDIUM.render("Volver al menú de selección de juegos", True, (255,255,255))
-        game.screen.blit(btn_label, btn_label.get_rect(center=btn_rect.center))
+        game.screen.blit(btn_label, btn_label.get_rect(center=boton_rect.center))
 
         pygame.display.flip()
         for event in pygame.event.get():
@@ -59,7 +66,7 @@ def mostrar_menu_victoria(game):
                 pygame.quit()
                 os._exit(0)
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                if btn_rect.collidepoint(mouse_pos):
+                if boton_rect.collidepoint(mouse_pos):
                     pygame.quit()
                     os._exit(0)
                     # Si quieres volver al menú en vez de cerrar, comenta la línea anterior y descomenta las siguientes:
@@ -70,8 +77,10 @@ def mostrar_menu_victoria(game):
 def mostrar_confirmacion_salida(game):
     running = True
     WIDTH, HEIGHT = game.screen.get_size()
-    FONT_LARGE = pygame.font.SysFont('Arial', 32, bold=True)
-    FONT_MEDIUM = pygame.font.SysFont('Arial', 24, bold=True)
+    import pygame
+    pygame.font.init()
+    FONT_LARGE = pygame.font.Font(FONT_PATH, 48)
+    FONT_MEDIUM = pygame.font.Font(FONT_PATH, 24)
     CENTER_COLOR = (0, 191, 255)
     BUTTON_COLOR = (30, 42, 56)
     BUTTON_RADIUS = 12
@@ -114,15 +123,19 @@ def mostrar_confirmacion_salida(game):
                 if btn1.collidepoint(mouse_pos):
                     game.guardar_partida()
                     game.running = False
+                    running = False
+                    import pygame
+                    pygame.display.quit()
                     pygame.quit()
-                    # Ir al menú principal de Hexa-Link
                     from menus.menu_hexalink import MenuHexaLink
                     MenuHexaLink(game.usuario, None)
                     return
                 elif btn2.collidepoint(mouse_pos):
                     game.running = False
+                    running = False
+                    import pygame
+                    pygame.display.quit()
                     pygame.quit()
-                    # Ir al menú principal de Hexa-Link
                     from menus.menu_hexalink import MenuHexaLink
                     MenuHexaLink(game.usuario, None)
                     return

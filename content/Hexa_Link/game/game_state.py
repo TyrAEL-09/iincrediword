@@ -1,52 +1,52 @@
 import math, pygame, random
 from .constants import *
-from .word_logic import choose_letters_and_words
-from .state_ui import setup_letter_positions, setup_buttons
+from .word_logic import elegir
+from .state_ui import setup_letter_posiciones, poner_botones
 from .state_logic import (
-    is_valid_word,
+    word_valida,
     handle_combo_and_feedback,
     find_heptacrack,
-    force_one_heptacrack
+    forzar_heptacrack
 )
 
 class GameState:
     def __init__(self):
-        self.raw_letters, self.center_letter, self.valid_words = choose_letters_and_words()
-        self.target_count, self.found_words, self.current_word, self.score = len(self.valid_words), [], "", 0
-        self.combo_count, self.combo_msg, self.combo_timer, self.paused = 0, "", 0, False
-        self.paused_time_total, self.pause_start, self.start_time = 0, 0, pygame.time.get_ticks()
-        self.last_word_feedback = None
-        force_one_heptacrack(self)
-        setup_letter_positions(self)
-        setup_buttons(self)
-        self.valid_by_initial = {}; [self.valid_by_initial.setdefault(w[0], []).append(w) for w in self.valid_words]
+        self.letras_base, self.letra_central, self.pals_validas = elegir()
+        self.target_count, self.pal_encontradas, self.pal_actual, self.score = len(self.pals_validas), [], "", 0
+        self.combo_cont, self.combo_msg, self.combo_timer, self.pausado = 0, "", 0, False
+        self.pausado_time_total, self.pause_start, self.start_time = 0, 0, pygame.time.get_ticks()
+        self.mensaje_pal = None
+        forzar_heptacrack(self)
+        setup_letter_posiciones(self)
+        poner_botones(self)
+        self.por_inicial = {}; [self.por_inicial.setdefault(w[0], []).append(w) for w in self.pals_validas]
 
-    def is_valid_word(self, word):
-        return is_valid_word(self, word)
+    def word_valida(self, word):
+        return word_valida(self, word)
 
     def submit_word(self):
         handle_combo_and_feedback(self)
 
-    def delete_last_letter(self): self.current_word = self.current_word[:-1]
-    def clear_word(self): self.current_word = ""
+    def borrarletra(self): self.pal_actual = self.pal_actual[:-1]
+    def clear_word(self): self.pal_actual = ""
     def toggle_pause(self):
-        if not self.paused:
-            self.paused, self.pause_start, self.current_word = True, pygame.time.get_ticks(), ""
+        if not self.pausado:
+            self.pausado, self.pause_start, self.pal_actual = True, pygame.time.get_ticks(), ""
         else:
-            self.paused, self.paused_time_total = False, self.paused_time_total + pygame.time.get_ticks() - self.pause_start
+            self.pausado, self.pausado_time_total = False, self.pausado_time_total + pygame.time.get_ticks() - self.pause_start
 
     def get_elapsed_time(self):
-        t = self.pause_start if self.paused else pygame.time.get_ticks()
-        return (t - self.start_time - self.paused_time_total) // 1000
+        t = self.pause_start if self.pausado else pygame.time.get_ticks()
+        return (t - self.start_time - self.pausado_time_total) // 1000
 
-    def is_game_complete(self): return len(self.found_words) >= self.target_count
+    def is_game_complete(self): return len(self.pal_encontradas) >= self.target_count
 
-    def shuffle_letters(self):
-        c = self.center_letter
-        o = [l for l in self.letters if l != c]
+    def shuffle_letras(self):
+        c = self.letra_central
+        o = [l for l in self.letras if l != c]
         random.shuffle(o)
-        idx = self.letters.index(c)
-        self.letters = o[:]; self.letters.insert(idx, c)
+        idx = self.letras.index(c)
+        self.letras = o[:]; self.letras.insert(idx, c)
 
     def get_heptacrack(self):
         if not hasattr(self, '_heptacrack'):
@@ -55,23 +55,23 @@ class GameState:
 
     def to_dict(self):
         return {
-            "raw_letters": self.raw_letters,
-            "center_letter": self.center_letter,
-            "valid_words": self.valid_words,
+            "letras_base": self.letras_base,
+            "letra_central": self.letra_central,
+            "pals_validas": self.pals_validas,
             "target_count": self.target_count,
-            "found_words": self.found_words,
-            "current_word": self.current_word,
+            "pal_encontradas": self.pal_encontradas,
+            "pal_actual": self.pal_actual,
             "score": self.score,
-            "combo_count": self.combo_count,
+            "combo_cont": self.combo_cont,
             "combo_msg": self.combo_msg,
             "combo_timer": self.combo_timer,
-            "paused": self.paused,
-            "paused_time_total": self.paused_time_total,
+            "pausado": self.pausado,
+            "pausado_time_total": self.pausado_time_total,
             "pause_start": self.pause_start,
             "start_time": self.start_time,
-            "letters": self.letters,
-            "positions": self.positions,
-            "valid_by_initial": self.valid_by_initial,
+            "letras": self.letras,
+            "posiciones": self.posiciones,
+            "por_inicial": self.por_inicial,
             # Guarda también los botones si quieres restaurar la UI exactamente igual
             "btn_shuffle_rect": self._rect_to_tuple(self.btn_shuffle_rect),
             "btn_check_rect": self._rect_to_tuple(self.btn_check_rect),
@@ -83,23 +83,23 @@ class GameState:
     @classmethod
     def from_dict(cls, data):
         obj = cls.__new__(cls)
-        obj.raw_letters = data["raw_letters"]
-        obj.center_letter = data["center_letter"]
-        obj.valid_words = data["valid_words"]
+        obj.letras_base = data["letras_base"]
+        obj.letra_central = data["letra_central"]
+        obj.pals_validas = data["pals_validas"]
         obj.target_count = data["target_count"]
-        obj.found_words = data["found_words"]
-        obj.current_word = data["current_word"]
+        obj.pal_encontradas = data["pal_encontradas"]
+        obj.pal_actual = data["pal_actual"]
         obj.score = data["score"]
-        obj.combo_count = data["combo_count"]
+        obj.combo_cont = data["combo_cont"]
         obj.combo_msg = data["combo_msg"]
         obj.combo_timer = data["combo_timer"]
-        obj.paused = data["paused"]
-        obj.paused_time_total = data["paused_time_total"]
+        obj.pausado = data["pausado"]
+        obj.pausado_time_total = data["pausado_time_total"]
         obj.pause_start = data["pause_start"]
         obj.start_time = data["start_time"]
-        obj.letters = data["letters"]
-        obj.positions = data["positions"]
-        obj.valid_by_initial = data["valid_by_initial"]
+        obj.letras = data["letras"]
+        obj.posiciones = data["posiciones"]
+        obj.por_inicial = data["por_inicial"]
         # Restaura los botones
         import pygame
         obj.btn_shuffle_rect = cls._tuple_to_rect(data.get("btn_shuffle_rect"))
@@ -107,8 +107,8 @@ class GameState:
         obj.btn_pause_rect = cls._tuple_to_rect(data.get("btn_pause_rect"))
         obj.btn_del_rect = cls._tuple_to_rect(data.get("btn_del_rect"))
         obj.btn_clear_rect = cls._tuple_to_rect(data.get("btn_clear_rect"))
-        # Asegura que last_word_feedback siempre exista
-        obj.last_word_feedback = data.get("last_word_feedback", None)
+        # Asegura que mensaje_pal siempre exista
+        obj.mensaje_pal = data.get("mensaje_pal", None)
         return obj
 
     @staticmethod

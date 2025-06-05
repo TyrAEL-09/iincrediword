@@ -1,5 +1,5 @@
 {
-  "raw_letters": [
+  "letras_base": [
     "n",
     "a",
     "e",
@@ -8,8 +8,8 @@
     "o",
     "r"
   ],
-  "center_letter": "e",
-  "valid_words": [
+  "letra_central": "e",
+  "pals_validas": [
     "crecen",
     "creen",
     "cerro",
@@ -64,19 +64,19 @@
     "creo"
   ],
   "target_count": 52,
-  "found_words": [
+  "pal_encontradas": [
     "conocer"
   ],
-  "current_word": "",
+  "pal_actual": "",
   "score": 140,
-  "combo_count": 1,
+  "combo_cont": 1,
   "combo_msg": "",
   "combo_timer": 0,
-  "paused": true,
-  "paused_time_total": 0,
+  "pausado": true,
+  "pausado_time_total": 0,
   "pause_start": 17870,
   "start_time": 9185,
-  "letters": [
+  "letras": [
     "n",
     "a",
     "h",
@@ -85,7 +85,7 @@
     "o",
     "r"
   ],
-  "positions": [
+  "posiciones": [
     [
       403.92304845413264,
       233.0
@@ -115,7 +115,7 @@
       143.0
     ]
   ],
-  "valid_by_initial": {
+  "por_inicial": {
     "c": [
       "crecen",
       "creen",

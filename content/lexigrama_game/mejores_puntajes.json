@@ -1,0 +1,25 @@
+{
+    "top_scores": [
+        {
+            "nombre": "ara",
+            "puntaje": 6692,
+            "tiempo": 16
+        },
+        {
+            "nombre": "isma",
+            "puntaje": 6691,
+            "tiempo": 21
+        },
+        {
+            "nombre": "joaco",
+            "puntaje": 6665,
+            "tiempo": 48
+        },
+        {
+            "nombre": "santi",
+            "puntaje": 6664,
+            "tiempo": 56
+        }
+
+    ]
+}

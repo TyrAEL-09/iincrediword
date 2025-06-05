@@ -1,59 +1,125 @@
 {
-    "crysys": {
+    "ara@gmail.com": {
         "board": [
             [
-                "A",
-                "D",
                 "O",
-                "B",
-                "R",
-                "I"
-            ],
-            [
-                "L",
                 "F",
-                "C",
                 "O",
-                "L",
-                "O"
+                "S",
+                "E",
+                "S"
             ],
             [
-                "A",
+                "R",
                 "I",
-                "H",
-                "S",
+                "C",
+                "I",
+                "L",
+                "A"
+            ],
+            [
                 "E",
-                "M"
+                "N",
+                "O",
+                "N",
+                "R",
+                "G"
             ],
             [
                 "C",
-                "S",
+                "D",
+                "C",
                 "A",
-                "T",
-                "S",
-                "I"
+                "O",
+                "A"
             ],
             [
-                "O",
-                "L",
-                "B",
-                "A",
+                "N",
                 "E",
-                "M"
+                "V",
+                "Z",
+                "I",
+                "N"
             ]
         ],
         "target_words": [
-            "CHIFLADO",
-            "FISCAL",
-            "ADOBO",
-            "SOBRIO",
-            "MESES",
-            "ESTABLO",
-            "MOLESTABA"
+            "COCINERO",
+            "RINDEN",
+            "VENCE",
+            "SALINO",
+            "ORGANIZAN",
+            "GASES",
+            "FOSILES"
         ],
-        "found_words": [],
+        "pal_encontradas": [
+            "COCINERO",
+            "RINDEN",
+            "VENCE",
+            "SALINO",
+            "ORGANIZAN",
+            "GASES",
+            "FOSILES"
+        ],
+        "score": 6664,
+        "time_elapsed": 56,
+        "current_selection_path": [],
+        "current_selected_word": ""
+    },
+    "admin": {
+        "board": [
+            [
+                "S",
+                "U",
+                "E",
+                "X",
+                "P",
+                "L"
+            ],
+            [
+                "L",
+                "E",
+                "N",
+                "A",
+                "T",
+                "O"
+            ],
+            [
+                "B",
+                "N",
+                "I",
+                "N",
+                "A",
+                "R"
+            ],
+            [
+                "I",
+                "V",
+                "A",
+                "S",
+                "P",
+                "T"
+            ],
+            [
+                "S",
+                "I",
+                "L",
+                "A",
+                "D",
+                "I"
+            ]
+        ],
+        "target_words": [
+            "SALIVA",
+            "EXPLOTAN",
+            "INVISIBLE",
+            "SUENA",
+            "TRATA",
+            "SUENEN",
+            "PARTIDA"
+        ],
+        "pal_encontradas": [],
         "score": 0,
-        "time_elapsed": 4,
+        "time_elapsed": 1,
         "current_selection_path": [],
         "current_selected_word": ""
     }

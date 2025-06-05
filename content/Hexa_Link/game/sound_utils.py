@@ -7,7 +7,7 @@ GOOD_PATH = os.path.join(BASE_PATH, "recursos", "good.mp3")
 FAIL_PATH = os.path.join(BASE_PATH, "recursos", "fail.mp3")
 HAIKUE_PATH = os.path.join(BASE_PATH, "recursos", "haikue.m4a")  # Cambiado a .m4a
 
-def play_click_sound():
+def sonido_click():
     try:
         if not pygame.mixer.get_init():
             pygame.mixer.init()
@@ -27,7 +27,7 @@ def play_feedback_sound(success):
     except Exception:
         pass
 
-def play_combo_sound():
+def sonido_combo():
     try:
         if not pygame.mixer.get_init():
             pygame.mixer.init()

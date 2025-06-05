@@ -2,7 +2,7 @@ import os
 
 TOCAR_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'recursos', 'tocar.mp3')
 
-def play_click_sound():
+def sonido_click():
     """
     Reproduce un sonido de clic usando pygame.
     Args: Ninguno.
