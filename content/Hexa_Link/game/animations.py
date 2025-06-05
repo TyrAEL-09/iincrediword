@@ -24,7 +24,7 @@ class FireAnimation:
         # Actualiza el estado de la animación según el combo
         self.active = combo_cont >= 2
         if self.active:
-            if pygame.time.get_ticks() - self.animation_timer > 100:
+            if pygame.time.get_ticks() - self.animation_timer > 60:
                 self.current_frame = (self.current_frame + 1) % 6
                 self.animation_timer = pygame.time.get_ticks()
         else:

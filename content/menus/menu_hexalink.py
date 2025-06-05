@@ -252,7 +252,7 @@ class MenuHexaLink:
             "    - Normal: combo < 5\n"
             "    - Azul: combo 5 a 9\n"
             "    - Violeta: combo 10 o más\n"
-            "• Puedes pausar el juego, guardar tu partida y unpausela luego.\n"
+            "• Puedes pausar el juego, guardar tu partida y reanudarla luego.\n"
             "• El botón de música permite activar/desactivar la música de \nfondo.\n"
             "• Al completar todas las palabras, verás tu puntaje y el ranking \nde los mejores.\n"
             "\n¡Buena suerte consiguiendo el mejor puntaje! :)"
